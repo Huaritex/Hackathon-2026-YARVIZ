@@ -4,7 +4,7 @@ import { HeroSection } from './HeroSection'
 
 // GLManager is not needed in DOM tests — mock it
 vi.mock('../../gl/GLManager', () => ({
-  GLManager: vi.fn().mockImplementation(function () {
+  GLManager: vi.fn().mockImplementation(function (this: Record<string, unknown>) {
     this.loadRobotModels = vi.fn().mockResolvedValue(undefined)
     this.setScrollProgress = vi.fn()
     this.setMouse = vi.fn()
