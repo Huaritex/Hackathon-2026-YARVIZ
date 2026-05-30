@@ -101,7 +101,7 @@ export function EcosystemSection() {
 
     return () => {
       tl.scrollTrigger?.kill()
-      tl.kill?.()
+      tl.kill()
     }
   }, [])
 

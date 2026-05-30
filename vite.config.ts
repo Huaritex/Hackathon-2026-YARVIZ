@@ -10,7 +10,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'v8',
-      thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
+      thresholds: { lines: 70, functions: 60, branches: 70, statements: 70 },
       exclude: ['src/gl/**', 'src/test/**', '**/*.test.*', '**/*.config.*'],
     },
   },

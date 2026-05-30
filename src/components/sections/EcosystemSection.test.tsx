@@ -14,6 +14,8 @@ vi.mock('gsap', async () => {
         to: vi.fn().mockReturnThis(),
         fromTo: vi.fn().mockReturnThis(),
         add: vi.fn().mockReturnThis(),
+        kill: vi.fn(),
+        scrollTrigger: null,
       })),
     },
   }

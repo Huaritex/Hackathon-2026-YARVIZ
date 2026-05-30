@@ -30,6 +30,9 @@ export class GLManager {
   private normScale = 1
   private robotLoaded = false
 
+  private bgGeo: THREE.PlaneGeometry
+  private bgMat: THREE.ShaderMaterial
+
   private mouse = new THREE.Vector2(0, 0)
   private elapsed = 0
 
@@ -58,6 +61,8 @@ export class GLManager {
       fragmentShader,
       uniforms: this.bgUniforms,
     })
+    this.bgGeo = bgGeo
+    this.bgMat = bgMat
     this.bgScene.add(new THREE.Mesh(bgGeo, bgMat))
 
     // ── Robot scene ───────────────────────────────────────────────────
@@ -180,6 +185,8 @@ export class GLManager {
 
   destroy(): void {
     window.removeEventListener('resize', this.onResize)
+    this.bgGeo.dispose()
+    this.bgMat.dispose()
     this.bodyGeo?.dispose()
     this.lidGeo?.dispose()
     ;(this.bodyMesh?.material as THREE.MeshStandardMaterial | null)?.dispose()

@@ -22,7 +22,9 @@ export function HeroSection() {
     // ── GL init (isolated from React) ──────────────────────────────
     const gl = new GLManager(canvas)
     glRef.current = gl
-    gl.loadRobotModels()
+    gl.loadRobotModels().catch((err: unknown) => {
+      console.error('[YARBIZ] Robot model load failed:', err)
+    })
 
     // ── GSAP ticker drives GL loop ─────────────────────────────────
     const onTick = (_time: number, deltaTime: number) => {
