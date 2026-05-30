@@ -4,6 +4,7 @@ import vertexShader from './shaders/hero.vert.glsl'
 import fragmentShader from './shaders/hero.frag.glsl'
 
 interface BgUniforms {
+  [key: string]: THREE.IUniform<unknown>
   uTime: THREE.IUniform<number>
   uScrollProgress: THREE.IUniform<number>
   uMouse: THREE.IUniform<THREE.Vector2>
@@ -24,11 +25,12 @@ export class GLManager {
   private robotGroup: THREE.Group
   private bodyMesh: THREE.Mesh | null = null
   private lidMesh: THREE.Mesh | null = null
+  private bodyGeo: THREE.BufferGeometry | null = null
+  private lidGeo: THREE.BufferGeometry | null = null
   private normScale = 1
   private robotLoaded = false
 
   private mouse = new THREE.Vector2(0, 0)
-  private scrollProgress = 0
   private elapsed = 0
 
   constructor(canvas: HTMLCanvasElement) {
@@ -108,6 +110,9 @@ export class GLManager {
     lidGeo.center()
     lidGeo.rotateX(-Math.PI / 2)
 
+    this.bodyGeo = bodyGeo
+    this.lidGeo = lidGeo
+
     this.bodyMesh = new THREE.Mesh(bodyGeo, material.clone())
     this.bodyMesh.scale.setScalar(this.normScale)
     this.bodyMesh.position.y = -2.5
@@ -123,7 +128,6 @@ export class GLManager {
   }
 
   setScrollProgress(p: number): void {
-    this.scrollProgress = p
     this.bgUniforms.uScrollProgress.value = p
 
     if (!this.robotLoaded || !this.bodyMesh || !this.lidMesh) return
@@ -176,6 +180,12 @@ export class GLManager {
 
   destroy(): void {
     window.removeEventListener('resize', this.onResize)
+    this.bodyGeo?.dispose()
+    this.lidGeo?.dispose()
+    ;(this.bodyMesh?.material as THREE.MeshStandardMaterial | null)?.dispose()
+    ;(this.lidMesh?.material as THREE.MeshStandardMaterial | null)?.dispose()
+    this.bgScene.clear()
+    this.robotScene.clear()
     this.renderer.dispose()
   }
 
