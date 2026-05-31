@@ -13,7 +13,8 @@ describe('PricingCard', () => {
   it('renders tier name and price', () => {
     const { getByText } = render(<PricingCard {...baseProps} />)
     expect(getByText('Starter')).toBeInTheDocument()
-    expect(getByText('$10')).toBeInTheDocument()
+    expect(getByText('$')).toBeInTheDocument()
+    expect(getByText('10')).toBeInTheDocument()
   })
 
   it('renders all feature items', () => {
@@ -22,13 +23,13 @@ describe('PricingCard', () => {
     expect(getByText('Hardware list')).toBeInTheDocument()
   })
 
-  it('shows MOST POPULAR badge when featured', () => {
+  it('shows MÁS RECOMENDADO badge when featured', () => {
     const { getByText } = render(<PricingCard {...baseProps} featured />)
-    expect(getByText('MOST POPULAR')).toBeInTheDocument()
+    expect(getByText('MÁS RECOMENDADO')).toBeInTheDocument()
   })
 
   it('does not show badge when not featured', () => {
     const { queryByText } = render(<PricingCard {...baseProps} />)
-    expect(queryByText('MOST POPULAR')).not.toBeInTheDocument()
+    expect(queryByText('MÁS RECOMENDADO')).not.toBeInTheDocument()
   })
 })

@@ -1,34 +1,67 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { PricingCard } from '../ui/PricingCard'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const STARTER_FEATURES = [
-  '3D printing blueprints',
-  'Hardware parts list & recommendations',
-  'Component sourcing guide',
-]
+const INDIVIDUAL_PRICES = {
+  starter: 10,
+  builder: 15,
+  masterclass: 20,
+}
 
-const BUILDER_FEATURES = [
-  'Everything in Starter',
-  'Full ESP32 source code',
-  'Electronic schematic diagrams',
-  'PCB layout files',
-]
+const CLASSROOM_PRICES = {
+  starter: 49,
+  builder: 79,
+  masterclass: 99,
+}
 
-const PRO_FEATURES = [
-  'Everything in Builder',
-  'Step-by-step assembly video tutorials',
-  'Hologram animation starter pack',
-  'Priority customer support & Discord access',
-]
+const INDIVIDUAL_FEATURES = {
+  starter: [
+    'Planos de impresión 3D (.STL)',
+    'Lista de componentes de hardware y recomendaciones',
+    'Guía de compra electrónica y enlaces directos',
+  ],
+  builder: [
+    'Todo lo incluido en Starter',
+    'Código fuente completo para ESP32',
+    'Diagramas esquemáticos electrónicos',
+    'Archivos de diseño PCB para fabricación',
+  ],
+  masterclass: [
+    'Todo lo incluido en Pro Builder',
+    'Videos tutoriales de ensamblaje paso a paso',
+    'Kit de inicio de animaciones holográficas',
+    'Soporte prioritario en Discord VIP',
+  ],
+}
+
+const CLASSROOM_FEATURES = {
+  starter: [
+    'Licencia de impresión 3D para toda la escuela',
+    'Hojas de trabajo de inventario de hardware',
+    'Guía de compra electrónica para compras masivas',
+  ],
+  builder: [
+    'Todo lo incluido en Starter (Aula)',
+    'Código fuente multiusuario con plantillas',
+    'Presentaciones PPT con diagramas esquemáticos',
+    'Planes de lecciones paso a paso (5 horas)',
+  ],
+  masterclass: [
+    'Todo lo incluido en Pro Builder (Aula)',
+    'Licencia completa de videoteca de proyectos',
+    'Guías de evaluación y rúbricas para el docente',
+    'Soporte directo prioritario para educadores',
+  ],
+}
 
 export function PricingSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
   const cardsRef   = useRef<HTMLDivElement>(null)
+  const [billingType, setBillingType] = useState<'individual' | 'classroom'>('individual')
 
   useEffect(() => {
     const heading = headingRef.current!
@@ -48,65 +81,84 @@ export function PricingSection() {
     return () => st.kill()
   }, [])
 
+  const prices = billingType === 'individual' ? INDIVIDUAL_PRICES : CLASSROOM_PRICES
+  const features = billingType === 'individual' ? INDIVIDUAL_FEATURES : CLASSROOM_FEATURES
+
   return (
     <section
       id="pricing"
       ref={sectionRef}
-      className="relative z-10 py-32 px-8"
+      className="relative z-10 py-32 px-6 bg-transparent"
       style={{ minHeight: '100vh' }}
     >
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto flex flex-col gap-12">
         {/* Heading */}
-        <div ref={headingRef} className="text-center mb-20">
+        <div ref={headingRef} className="text-center select-none">
           <p
-            className="font-mono text-xs tracking-[0.4em] uppercase mb-4"
-            style={{ color: 'var(--text-dim)' }}
+            className="font-mono text-xs tracking-[0.4em] uppercase mb-4 text-text-muted"
           >
-            Choose your starting point
+            elige tu punto de partida
           </p>
           <h2
-            className="font-mono font-black text-4xl md:text-6xl"
-            style={{ color: 'var(--text-primary)' }}
+            className="font-mono font-black text-4xl md:text-6xl text-text-hero"
           >
-            Get Your Kit
+            Planes de Crecimiento
           </h2>
           <p
-            className="mt-4 font-mono text-base"
-            style={{ color: 'var(--text-dim)' }}
+            className="mt-4 font-mono text-sm md:text-base text-text-muted"
           >
-            Every tier ships with instant digital delivery.
+            Todos los paquetes incluyen descarga digital instantánea de planos y archivos de código.
           </p>
+        </div>
+
+        {/* Interactive Toggle */}
+        <div className="flex justify-center items-center gap-4 mb-6 select-none">
+          <span className={`font-mono text-xs transition-colors duration-300 ${billingType === 'individual' ? 'text-accent-indigo font-bold' : 'text-text-muted'}`}>
+            Licencia Individual
+          </span>
+          <button
+            onClick={() => setBillingType(billingType === 'individual' ? 'classroom' : 'individual')}
+            className="relative w-14 h-7 rounded-full bg-bg-card border border-border-subtle p-1 transition-colors duration-300"
+          >
+            <div
+              className={`w-5 h-5 rounded-full bg-accent-indigo transition-transform duration-300 ${
+                billingType === 'classroom' ? 'translate-x-7 bg-accent-teal' : ''
+              }`}
+            />
+          </button>
+          <span className={`font-mono text-xs transition-colors duration-300 ${billingType === 'classroom' ? 'text-accent-teal font-bold' : 'text-text-muted'}`}>
+            Educadores / Aula
+          </span>
         </div>
 
         {/* Cards grid */}
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch"
         >
           <PricingCard
             tier="Starter"
-            price={10}
-            features={STARTER_FEATURES}
+            price={prices.starter}
+            features={features.starter}
           />
           <PricingCard
-            tier="Builder"
-            price={15}
-            features={BUILDER_FEATURES}
+            tier="Pro Builder"
+            price={prices.builder}
+            features={features.builder}
             featured
           />
           <PricingCard
-            tier="Pro"
-            price={20}
-            features={PRO_FEATURES}
+            tier="Masterclass"
+            price={prices.masterclass}
+            features={features.masterclass}
           />
         </div>
 
         {/* Footer note */}
         <p
-          className="text-center mt-12 font-mono text-xs tracking-widest"
-          style={{ color: 'var(--text-dim)' }}
+          className="text-center mt-6 font-mono text-xs tracking-widest text-text-muted"
         >
-          All tiers — instant download · No subscription · Yours forever
+          Todos los niveles — Descarga instantánea · Código abierto · Sin suscripción
         </p>
       </div>
     </section>

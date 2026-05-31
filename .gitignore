@@ -26,3 +26,14 @@ dist-ssr
 # Ignore source STL files at root (copied to public/models/)
 /cuerpo yarvis original-CuerpoPocket012.stl
 /tapa deslisable-CuerpoPad001.stl
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Video project builds
+video/out/
+video/node_modules/
+

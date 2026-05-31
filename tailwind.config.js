@@ -4,6 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
+        'bg-main': 'var(--bg-main)',
+        'bg-card': 'var(--bg-card)',
+        'accent-indigo': 'var(--accent-indigo)',
+        'accent-teal': 'var(--accent-teal)',
+        'text-hero': 'var(--text-hero)',
+        'text-muted': 'var(--text-muted)',
+        'border-subtle': 'var(--border-subtle)',
         'bg-void': 'var(--bg-void)',
         'bg-surface': 'var(--bg-surface)',
         'accent-cyan': 'var(--accent-cyan)',

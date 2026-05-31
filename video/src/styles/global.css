@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-main: #09090b;
+  --bg-card: rgba(24, 24, 27, 0.6);
+  --accent-indigo: #6366f1;
+  --accent-teal: #14b8a6;
+  --text-hero: #ffffff;
+  --text-muted: #a1a1aa;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-hero);
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

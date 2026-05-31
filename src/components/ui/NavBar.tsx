@@ -15,17 +15,17 @@ export function NavBar() {
       start: 'top -60',
       onEnter: () =>
         gsap.to(nav, {
-          backgroundColor: 'rgba(4, 4, 10, 0.85)',
-          backdropFilter: 'blur(14px)',
-          borderBottomColor: 'rgba(0, 240, 255, 0.12)',
+          backgroundColor: 'rgba(9, 9, 11, 0.75)',
+          backdropFilter: 'blur(16px)',
+          borderBottomColor: 'var(--border-subtle)',
           duration: 0.4,
           ease: 'power2.out',
         }),
       onLeaveBack: () =>
         gsap.to(nav, {
-          backgroundColor: 'rgba(4, 4, 10, 0)',
+          backgroundColor: 'rgba(9, 9, 11, 0)',
           backdropFilter: 'blur(0px)',
-          borderBottomColor: 'rgba(0, 240, 255, 0)',
+          borderBottomColor: 'rgba(255, 255, 255, 0)',
           duration: 0.3,
         }),
     })
@@ -36,41 +36,40 @@ export function NavBar() {
   return (
     <nav
       ref={navRef}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 border-b"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 border-b"
       style={{
-        backgroundColor: 'rgba(4, 4, 10, 0)',
-        borderBottomColor: 'rgba(0, 240, 255, 0)',
+        backgroundColor: 'rgba(9, 9, 11, 0)',
+        borderBottomColor: 'rgba(255, 255, 255, 0)',
       }}
     >
       <span
-        className="font-mono text-xl font-black tracking-[0.2em]"
-        style={{ color: 'var(--accent-cyan)' }}
+        className="font-mono text-xl font-black tracking-[0.2em] text-text-hero"
       >
-        YARBIZ
+        YARVIZ
       </span>
 
       <a
         href="#pricing"
         className="
-          px-5 py-2 font-mono text-xs font-bold tracking-[0.2em] uppercase
+          px-5 py-2 font-mono text-xs font-bold tracking-[0.2em] uppercase rounded-lg
           border transition-all duration-300
         "
         style={{
-          borderColor: 'var(--accent-cyan)',
-          color: 'var(--accent-cyan)',
+          borderColor: 'var(--accent-indigo)',
+          color: 'var(--accent-indigo)',
         }}
         onMouseEnter={(e) => {
           ;(e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-            'var(--accent-cyan)'
-          ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--bg-void)'
+            'var(--accent-indigo)'
+          ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-hero)'
         }}
         onMouseLeave={(e) => {
           ;(e.currentTarget as HTMLAnchorElement).style.backgroundColor =
             'transparent'
-          ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent-cyan)'
+          ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent-indigo)'
         }}
       >
-        Get Your Kit →
+        Adquirir Kit →
       </a>
     </nav>
   )

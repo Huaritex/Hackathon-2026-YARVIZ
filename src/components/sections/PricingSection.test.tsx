@@ -6,19 +6,20 @@ describe('PricingSection', () => {
   it('renders all three pricing tiers', () => {
     const { getByText } = render(<PricingSection />)
     expect(getByText('Starter')).toBeInTheDocument()
-    expect(getByText('Builder')).toBeInTheDocument()
-    expect(getByText('Pro')).toBeInTheDocument()
+    expect(getByText('Pro Builder')).toBeInTheDocument()
+    expect(getByText('Masterclass')).toBeInTheDocument()
   })
 
   it('renders correct prices', () => {
-    const { getByText } = render(<PricingSection />)
-    expect(getByText('$10')).toBeInTheDocument()
-    expect(getByText('$15')).toBeInTheDocument()
-    expect(getByText('$20')).toBeInTheDocument()
+    const { getByText, getAllByText } = render(<PricingSection />)
+    expect(getByText('10')).toBeInTheDocument()
+    expect(getByText('15')).toBeInTheDocument()
+    expect(getByText('20')).toBeInTheDocument()
+    expect(getAllByText('$').length).toBeGreaterThan(0)
   })
 
   it('renders section heading', () => {
     const { getByText } = render(<PricingSection />)
-    expect(getByText(/get your kit/i)).toBeInTheDocument()
+    expect(getByText(/Planes de Crecimiento/i)).toBeInTheDocument()
   })
 })

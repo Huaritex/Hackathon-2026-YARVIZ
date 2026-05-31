@@ -22,15 +22,16 @@ vi.mock('gsap', async () => {
 })
 
 describe('EcosystemSection', () => {
-  it('renders all three feature titles', () => {
+  it('renders bento features', () => {
     const { getByText } = render(<EcosystemSection />)
-    expect(getByText(/Shape YARBIZ/i)).toBeInTheDocument()
-    expect(getByText(/It Sounds Like You/i)).toBeInTheDocument()
-    expect(getByText(/Create Your Holograms/i)).toBeInTheDocument()
+    expect(getByText(/Personalización de Personalidad/i)).toBeInTheDocument()
+    expect(getByText(/Voz ElevenLabs/i)).toBeInTheDocument()
+    expect(getByText(/Animaciones Holográficas/i)).toBeInTheDocument()
+    expect(getByText(/Almacenamiento Local Seguro/i)).toBeInTheDocument()
   })
 
   it('renders section heading', () => {
     const { getByText } = render(<EcosystemSection />)
-    expect(getByText(/the ecosystem/i)).toBeInTheDocument()
+    expect(getByText(/Ecosistema Integrado/i)).toBeInTheDocument()
   })
 })

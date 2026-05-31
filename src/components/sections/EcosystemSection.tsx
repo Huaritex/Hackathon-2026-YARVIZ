@@ -1,182 +1,164 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Brain, Volume2, Sparkles, ShieldCheck } from 'lucide-react'
+import { useCursorGlow } from '../../hooks/useCursorGlow'
 
 gsap.registerPlugin(ScrollTrigger)
 
-interface Feature {
+interface BentoCardProps {
+  icon: React.ReactNode
   tag: string
   title: string
-  body: string
-  symbol: string
-  accent: 'cyan' | 'violet'
+  description: string
+  className?: string
+  accentColor: 'indigo' | 'teal'
 }
 
-const FEATURES: Feature[] = [
-  {
-    tag: '01 / DEEP CUSTOMIZATION',
-    title: "Shape YARBIZ's Soul",
-    body: "Web & mobile app to define behavior prompts. Program YARBIZ to be sarcastic, helpful, mysterious, or motivating. Your assistant, your personality — no limits.",
-    symbol: '⬡',
-    accent: 'cyan',
-  },
-  {
-    tag: '02 / YOUR VOICE',
-    title: 'It Sounds Like You',
-    body: 'Native ElevenLabs integration. Choose from thousands of voices or clone your own. YARBIZ speaks exactly how you imagine — every word, every tone.',
-    symbol: '◉',
-    accent: 'violet',
-  },
-  {
-    tag: '03 / HOLOGRAM STUDIO',
-    title: 'Create Your Holograms',
-    body: 'Custom animation tool for the holographic display. Design animations, upload GIFs, total creative freedom over what your robot projects into thin air.',
-    symbol: '◈',
-    accent: 'cyan',
-  },
-]
+function BentoCard({ icon, tag, title, description, className = '', accentColor }: BentoCardProps) {
+  const cardRef = useCursorGlow<HTMLDivElement>()
+
+  const hoverColor = accentColor === 'indigo' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(20, 184, 166, 0.15)'
+  const glowStyle = {
+    '--glow-color': hoverColor,
+  } as React.CSSProperties
+
+  return (
+    <div
+      ref={cardRef}
+      style={glowStyle}
+      className={`
+        relative overflow-hidden group p-8 rounded-2xl bg-bg-card border border-border-subtle
+        backdrop-blur-md transition-all duration-500 hover:border-accent-${accentColor}/30 hover:scale-[1.01]
+        ${className}
+      `}
+    >
+      {/* Radial Gradient Glow on Mouse Over (requires useCursorGlow hook setup) */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"
+        style={{
+          background: `radial-gradient(400px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), var(--glow-color), transparent 70%)`
+        }}
+      />
+
+      <div className="relative z-10 flex flex-col h-full justify-between gap-6">
+        <div className="flex flex-col gap-4">
+          <div className={`
+            self-start p-3 rounded-lg border border-border-subtle bg-bg-main/50
+            text-accent-${accentColor} group-hover:scale-110 group-hover:border-accent-${accentColor}/20 transition-all duration-300
+          `}>
+            {icon}
+          </div>
+          <span className="font-mono text-[10px] tracking-[0.25em] text-text-muted uppercase">
+            {tag}
+          </span>
+          <h3 className="font-mono font-bold text-xl md:text-2xl text-text-hero">
+            {title}
+          </h3>
+        </div>
+        <p className="font-mono text-xs md:text-sm text-text-muted leading-relaxed">
+          {description}
+        </p>
+      </div>
+    </div>
+  )
+}
 
 export function EcosystemSection() {
-  const wrapperRef  = useRef<HTMLDivElement>(null)
-  const feature1Ref = useRef<HTMLDivElement>(null)
-  const feature2Ref = useRef<HTMLDivElement>(null)
-  const feature3Ref = useRef<HTMLDivElement>(null)
-  const visual1Ref  = useRef<HTMLDivElement>(null)
-  const visual2Ref  = useRef<HTMLDivElement>(null)
-  const visual3Ref  = useRef<HTMLDivElement>(null)
-
-  const featureRefs = [feature1Ref, feature2Ref, feature3Ref]
-  const visualRefs  = [visual1Ref,  visual2Ref,  visual3Ref]
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const wrapper = wrapperRef.current!
-    const f1 = feature1Ref.current!
-    const f2 = feature2Ref.current!
-    const f3 = feature3Ref.current!
-    const v1 = visual1Ref.current!
-    const v2 = visual2Ref.current!
-    const v3 = visual3Ref.current!
+    const heading = sectionRef.current?.querySelector('.bento-heading')
+    const cards = gridRef.current?.children
 
-    // Initial states: f1 visible, f2/f3 hidden below
-    gsap.set([f2, f3], { opacity: 0, y: 50 })
-    gsap.set([v2, v3], { opacity: 0, y: 30 })
+    if (!heading || !cards) return
 
-    // Total virtual time = 4 units:
-    //   0→1  : feature 1 visible (holding)
-    //   1→2  : feature 1 exits, feature 2 enters
-    //   2→3  : feature 2 visible (holding)
-    //   3→4  : feature 2 exits, feature 3 enters
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: wrapper,
-        start: 'top top',
-        end: '+=300%',
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
+    gsap.set([heading, ...Array.from(cards)], { opacity: 0, y: 30 })
+
+    const st = ScrollTrigger.create({
+      trigger: sectionRef.current!,
+      start: 'top 80%',
+      onEnter: () => {
+        gsap.to(heading, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
+        gsap.to(Array.from(cards), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.15,
+          ease: 'power2.out',
+          delay: 0.2,
+        })
       },
     })
 
-    // Hold feature 1 (0→1)
-    tl.to({}, { duration: 1 }, 0)
-
-    // Feature 1 exits + Feature 2 enters (1→2)
-    tl.to([f1, v1], { opacity: 0, y: -50, duration: 0.5 }, 1)
-    tl.fromTo(f2, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 }, 1.2)
-    tl.fromTo(v2, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 }, 1.3)
-
-    // Hold feature 2 (2→3)
-    tl.to({}, { duration: 1 }, 2)
-
-    // Feature 2 exits + Feature 3 enters (3→4)
-    tl.to([f2, v2], { opacity: 0, y: -50, duration: 0.5 }, 3)
-    tl.fromTo(f3, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 }, 3.2)
-    tl.fromTo(v3, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 }, 3.3)
-
-    // Parallax: visual symbols move at 0.6× scroll speed during hold phases
-    // Achieved by additional translateY driven by the same scrubbed tl
-    tl.to(v1, { y: -40, ease: 'none', duration: 1 }, 0)
-    tl.to(v2, { y: -40, ease: 'none', duration: 1 }, 2)
-    tl.to(v3, { y: -40, ease: 'none', duration: 1 }, 3)
-
-    return () => {
-      tl.scrollTrigger?.kill()
-      tl.kill()
-    }
+    return () => st.kill()
   }, [])
 
   return (
-    <div ref={wrapperRef} className="relative z-10">
-      {/* Sticky inner container */}
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-        {/* Section label */}
-        <p
-          className="absolute top-8 left-1/2 -translate-x-1/2 font-mono text-xs tracking-[0.4em] uppercase"
-          style={{ color: 'var(--text-dim)' }}
+    <section
+      id="funcionamiento"
+      ref={sectionRef}
+      className="relative z-10 py-32 px-6 bg-transparent"
+    >
+      <div className="max-w-6xl mx-auto flex flex-col gap-16">
+        {/* Heading */}
+        <div className="bento-heading flex flex-col gap-4 text-center max-w-2xl mx-auto select-none">
+          <span className="font-mono text-xs font-bold tracking-[0.4em] uppercase text-text-muted">
+            TECNOLOGÍA DE VANGUARDIA
+          </span>
+          <h2 className="font-mono font-black text-4xl md:text-6xl text-text-hero leading-tight">
+            Ecosistema Integrado
+          </h2>
+          <p className="font-mono text-sm md:text-base text-text-muted">
+            Componentes de calidad industrial y algoritmos avanzados combinados en un ecosistema abierto y modificable.
+          </p>
+        </div>
+
+        {/* Bento Grid */}
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
-          The Ecosystem
-        </p>
+          {/* Card 1: Personality */}
+          <BentoCard
+            accentColor="indigo"
+            className="md:col-span-2"
+            icon={<Brain size={24} />}
+            tag="01 // INTELIGENCIA"
+            title="Personalización de Personalidad"
+            description="Controla la conducta y valores de tu asistente. Mediante una app integrada, define el tono, los modales e instrucciones generales de comportamiento de la IA."
+          />
 
-        {/* Feature panels — all in same absolute space */}
-        <div className="relative flex items-center justify-center h-full px-8 max-w-6xl mx-auto w-full">
-          {FEATURES.map((feature, i) => {
-            const fRef = featureRefs[i]
-            const vRef = visualRefs[i]
-            const accentColor =
-              feature.accent === 'cyan' ? 'var(--accent-cyan)' : 'var(--accent-violet)'
+          {/* Card 2: Voice */}
+          <BentoCard
+            accentColor="teal"
+            icon={<Volume2 size={24} />}
+            tag="02 // AUDIO"
+            title="Voz ElevenLabs"
+            description="Integración de voz ultra realista. Clona tu propia voz o elige entre miles de locutores y voces premium para que tu robot hable con fluidez."
+          />
 
-            return (
-              <div
-                key={feature.tag}
-                ref={fRef}
-                className="absolute inset-0 flex items-center justify-between gap-16 px-12"
-              >
-                {/* Text side */}
-                <div className="flex-1 max-w-lg">
-                  <p
-                    className="font-mono text-xs tracking-[0.3em] mb-6"
-                    style={{ color: 'var(--text-dim)' }}
-                  >
-                    {feature.tag}
-                  </p>
-                  <h2
-                    className="font-mono font-black text-4xl md:text-5xl leading-tight mb-6"
-                    style={{ color: 'var(--text-primary)' }}
-                  >
-                    {feature.title}
-                  </h2>
-                  <p
-                    className="font-mono text-base leading-relaxed"
-                    style={{ color: 'var(--text-dim)', maxWidth: '42ch' }}
-                  >
-                    {feature.body}
-                  </p>
-                </div>
+          {/* Card 3: Holographic display */}
+          <BentoCard
+            accentColor="teal"
+            icon={<Sparkles size={24} />}
+            tag="03 // DISPLAY"
+            title="Animaciones Holográficas"
+            description="Una pantalla reflejada en un prisma semitransparente genera un holograma flotante. Diseña animaciones, avatares o emoticonos que reaccionen a la conversación."
+          />
 
-                {/* Visual side — parallax layer */}
-                <div
-                  ref={vRef}
-                  className="flex-shrink-0 flex items-center justify-center"
-                  style={{ width: 320, height: 320 }}
-                >
-                  <span
-                    className="font-mono select-none"
-                    style={{
-                      fontSize: '14rem',
-                      color: accentColor,
-                      opacity: 0.15,
-                      textShadow: `0 0 80px ${accentColor}`,
-                      lineHeight: 1,
-                    }}
-                  >
-                    {feature.symbol}
-                  </span>
-                </div>
-              </div>
-            )
-          })}
+          {/* Card 4: Local Storage */}
+          <BentoCard
+            accentColor="indigo"
+            className="md:col-span-2"
+            icon={<ShieldCheck size={24} />}
+            tag="04 // SEGURIDAD"
+            title="Almacenamiento Local Seguro"
+            description="Privacidad absoluta en tu propia casa. Las llaves de API, configuraciones personales y registros de audio permanecen cifrados localmente en la memoria flash de tu hardware."
+          />
         </div>
       </div>
-    </div>
+    </section>
   )
 }

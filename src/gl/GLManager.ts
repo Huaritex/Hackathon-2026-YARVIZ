@@ -29,6 +29,7 @@ export class GLManager {
   private lidGeo: THREE.BufferGeometry | null = null
   private normScale = 1
   private robotLoaded = false
+  private robotScrollRotationY = 0
 
   private bgGeo: THREE.PlaneGeometry
   private bgMat: THREE.ShaderMaterial
@@ -75,11 +76,16 @@ export class GLManager {
     )
     this.robotCamera.position.z = 5
 
-    // Cyan key light + dim violet fill
-    const keyLight = new THREE.PointLight(0x00f0ff, 3, 12)
+    // Indigo key light + Teal fill light
+    const keyLight = new THREE.PointLight(0x6366f1, 4, 15)
     keyLight.position.set(2, 3, 4)
     this.robotScene.add(keyLight)
-    this.robotScene.add(new THREE.AmbientLight(0x9333ea, 0.4))
+
+    const fillLight = new THREE.PointLight(0x14b8a6, 2, 12)
+    fillLight.position.set(-2, -1, 3)
+    this.robotScene.add(fillLight)
+
+    this.robotScene.add(new THREE.AmbientLight(0x6366f1, 0.25))
 
     this.robotGroup = new THREE.Group()
     this.robotScene.add(this.robotGroup)
@@ -92,11 +98,13 @@ export class GLManager {
   async loadRobotModels(): Promise<void> {
     const loader = new STLLoader()
     const material = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(0x1a1a2e),
-      emissive: new THREE.Color(0x00f0ff),
+      color: new THREE.Color(0x18181b),
+      emissive: new THREE.Color(0x14b8a6),
       emissiveIntensity: 0,
-      metalness: 0.8,
-      roughness: 0.2,
+      metalness: 0.9,
+      roughness: 0.15,
+      transparent: true,
+      opacity: 1,
     })
 
     const [bodyGeo, lidGeo] = await Promise.all([
@@ -134,12 +142,14 @@ export class GLManager {
 
   setScrollProgress(p: number): void {
     this.bgUniforms.uScrollProgress.value = p
+  }
 
+  setRobotAssembly(p: number): void {
     if (!this.robotLoaded || !this.bodyMesh || !this.lidMesh) return
 
-    // Phase 0.33 → 0.66: body rises + scales in
-    if (p > 0.33) {
-      const phase = Math.min((p - 0.33) / 0.33, 1)
+    // 0.0 → 0.5: body rises + scales in
+    if (p > 0.0) {
+      const phase = Math.min(p / 0.5, 1)
       this.bodyMesh.visible = true
       this.bodyMesh.position.y = -2.5 + 2.5 * phase
       this.bodyMesh.scale.setScalar(this.normScale * phase)
@@ -147,9 +157,9 @@ export class GLManager {
       this.bodyMesh.visible = false
     }
 
-    // Phase 0.66 → 1.0: lid slides down + emissive glow ramps
-    if (p > 0.66) {
-      const phase = Math.min((p - 0.66) / 0.34, 1)
+    // 0.5 → 1.0: lid slides down + emissive glow ramps
+    if (p > 0.5) {
+      const phase = Math.min((p - 0.5) / 0.5, 1)
       this.lidMesh.visible = true
       this.lidMesh.position.y = 2.0 - 2.0 * phase
       const emissive = 0.4 * phase
@@ -158,6 +168,24 @@ export class GLManager {
     } else {
       this.lidMesh.visible = false
     }
+  }
+
+  setRobotPosition(x: number, y: number, z: number): void {
+    this.robotGroup.position.set(x, y, z)
+  }
+
+  setRobotScale(s: number): void {
+    this.robotGroup.scale.setScalar(s)
+  }
+
+  setRobotOpacity(opacity: number): void {
+    if (!this.robotLoaded || !this.bodyMesh || !this.lidMesh) return
+    ;(this.bodyMesh.material as THREE.MeshStandardMaterial).opacity = opacity
+    ;(this.lidMesh.material as THREE.MeshStandardMaterial).opacity = opacity
+  }
+
+  setRobotScrollRotation(ry: number): void {
+    this.robotScrollRotationY = ry
   }
 
   setMouse(x: number, y: number): void {
@@ -170,8 +198,8 @@ export class GLManager {
     this.bgUniforms.uTime.value = this.elapsed * 0.001  // ms → seconds
 
     if (!this.robotLoaded) return
-    // Slow continuous Y rotation + mouse-driven X/Z tilt
-    this.robotGroup.rotation.y += deltaMs * 0.00025
+    // Slow continuous Y rotation + mouse-driven X/Z tilt + custom scroll rotation
+    this.robotGroup.rotation.y = this.robotScrollRotationY + this.elapsed * 0.00025
     this.robotGroup.rotation.x = this.mouse.y * 0.08
     this.robotGroup.rotation.z = -this.mouse.x * 0.04
   }

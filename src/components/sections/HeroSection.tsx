@@ -2,141 +2,121 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { GLManager } from '../../gl/GLManager'
-import { GlitchText } from '../ui/GlitchText'
 
 gsap.registerPlugin(ScrollTrigger)
 
-export function HeroSection() {
+interface HeroSectionProps {
+  gl: GLManager | null
+}
+
+export function HeroSection({ gl }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const canvasRef    = useRef<HTMLCanvasElement>(null)
-  const subtitleRef  = useRef<HTMLParagraphElement>(null)
-  const ctaRef       = useRef<HTMLAnchorElement>(null)
-  const glRef        = useRef<GLManager | null>(null)
+  const textContentRef = useRef<HTMLDivElement>(null)
+  const ctaContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const canvas    = canvasRef.current!
+    if (!gl) return
+
     const container = containerRef.current!
-    const subtitle  = subtitleRef.current!
-    const cta       = ctaRef.current!
+    const textContent = textContentRef.current!
+    const ctaContainer = ctaContainerRef.current!
 
-    // ── GL init (isolated from React) ──────────────────────────────
-    const gl = new GLManager(canvas)
-    glRef.current = gl
-    gl.loadRobotModels().catch((err: unknown) => {
-      console.error('[YARBIZ] Robot model load failed:', err)
-    })
+    // Reset initial states
+    gl.setRobotAssembly(0)
+    gl.setRobotPosition(0, 0, 0)
+    gl.setRobotScale(1)
+    gl.setRobotOpacity(1)
 
-    // ── GSAP ticker drives GL loop ─────────────────────────────────
-    const onTick = (_time: number, deltaTime: number) => {
-      gl.tick(deltaTime)
-      gl.render()
-    }
-    gsap.ticker.add(onTick)
-    gsap.ticker.lagSmoothing(0)
-
-    // ── Mouse → GL ─────────────────────────────────────────────────
-    const onMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth  - 0.5) * 2
-      const y = -(e.clientY / window.innerHeight - 0.5) * 2
-      gl.setMouse(x, y)
-    }
-    window.addEventListener('mousemove', onMouseMove)
-
-    // ── Initial DOM state ──────────────────────────────────────────
-    gsap.set(subtitle, { opacity: 0 })
-    gsap.set(cta, { opacity: 0, y: 24 })
-
-    // ── ScrollTrigger pin — 300vh total, 3 phases ──────────────────
-    //   Phase 0→1 : subtitle fades in
-    //   Phase 1→2 : robot assembly (handled by GL via onUpdate)
-    //   Phase 2→3 : CTA fades in
+    // Build timeline for Hero scrollytelling
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
         start: 'top top',
-        end: '+=300%',
+        end: '+=150%',
         scrub: 1,
         pin: true,
         anticipatePin: 1,
-        onUpdate: (self) => gl.setScrollProgress(self.progress),
+        onUpdate: (self) => {
+          // As the user scrolls, the robot is assembled from 0.0 to 1.0
+          gl.setRobotAssembly(self.progress)
+        },
       },
     })
 
-    tl.to(subtitle, { opacity: 1, duration: 1 }, 0)
-    tl.to({}, { duration: 1 })                              // robot phase (GL-only)
-    tl.to(cta, { opacity: 1, y: 0, duration: 1 }, '>')
+    // Fade and shift elements during scroll
+    tl.to(textContent, { opacity: 0.15, scale: 0.95, duration: 1 }, 0)
+    tl.to(ctaContainer, { opacity: 0, y: -20, duration: 0.8 }, 0)
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove)
-      gsap.ticker.remove(onTick)
-      // Kill only this section's ScrollTrigger — not all global triggers
       tl.scrollTrigger?.kill()
       tl.kill()
-      gl.destroy()
     }
-  }, [])
+  }, [gl])
 
   return (
-    <>
-      {/* GL canvas — fixed behind all sections */}
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 z-0"
-        style={{ pointerEvents: 'none' }}
-      />
-
-      {/* Hero DOM overlay — pinned by ScrollTrigger */}
-      <div
-        ref={containerRef}
-        data-testid="hero-container"
-        className="relative z-10 flex flex-col items-center justify-center h-screen"
+    <div
+      ref={containerRef}
+      data-testid="hero-container"
+      className="relative z-10 flex flex-col items-center justify-center min-h-screen bg-transparent px-6"
+    >
+      {/* Hero content overlay */}
+      <div 
+        ref={textContentRef}
+        className="max-w-4xl text-center select-none flex flex-col items-center gap-6 mt-16"
       >
-        <div className="text-center select-none">
-          <GlitchText
-            text="YARBIZ"
-            className="block font-mono font-black tracking-[0.18em]"
-            style={{
-              fontSize: 'clamp(4rem, 13vw, 11rem)',
-              color: 'var(--accent-cyan)',
-              textShadow: '0 0 60px rgba(0,240,255,0.4), 0 0 120px rgba(0,240,255,0.15)',
-            }}
-            duration={1.6}
-          />
+        <span className="font-mono text-xs font-bold tracking-[0.4em] uppercase text-accent-indigo">
+          YARVIZ // PROYECTO ROBÓTICA DIY & IA
+        </span>
+        
+        <h1 
+          className="font-mono font-black tracking-tight leading-none text-4xl sm:text-6xl md:text-7xl text-text-hero"
+        >
+          Tu primer IA Físico. <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-indigo via-accent-teal to-accent-indigo bg-[length:200%_auto] animate-[pulse_6s_infinite]">
+            Creado por ti.
+          </span>
+        </h1>
 
-          <p
-            ref={subtitleRef}
-            className="mt-5 font-mono text-sm tracking-[0.35em] uppercase"
-            style={{ color: 'var(--text-dim)' }}
-          >
-            Build your own AI holographic assistant
-          </p>
-        </div>
+        <p 
+          className="max-w-2xl font-mono text-sm sm:text-base text-text-muted leading-relaxed"
+        >
+          YARVIZ es el kit definitivo para adentrarte al mundo tech. Ensambla, programa y personaliza tu propio robot asistente con interfaz holográfica.
+        </p>
+      </div>
 
+      {/* Double CTA Buttons */}
+      <div 
+        ref={ctaContainerRef}
+        className="flex flex-col sm:flex-row items-center gap-4 mt-12 w-full max-w-md justify-center z-20"
+      >
+        {/* Primary glow button */}
         <a
-          ref={ctaRef}
           href="#pricing"
           className="
-            mt-20 px-10 py-4 font-mono font-bold text-sm tracking-[0.25em] uppercase
-            transition-all duration-300
+            relative w-full sm:w-auto px-8 py-4 font-mono font-black text-sm tracking-[0.2em] uppercase rounded-lg
+            bg-accent-indigo text-text-hero border border-accent-indigo/20 shadow-[0_0_30px_rgba(99,102,241,0.3)]
+            hover:shadow-[0_0_50px_rgba(99,102,241,0.6)] hover:scale-105 transition-all duration-300 text-center
           "
-          style={{
-            backgroundColor: 'var(--accent-cyan)',
-            color: 'var(--bg-void)',
-          }}
-          onMouseEnter={(e) => {
-            ;(e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-              'var(--accent-violet)'
-            ;(e.currentTarget as HTMLAnchorElement).style.color = '#fff'
-          }}
-          onMouseLeave={(e) => {
-            ;(e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-              'var(--accent-cyan)'
-            ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--bg-void)'
-          }}
         >
-          Get Your Kit →
+          Comenzar Ahora
+        </a>
+
+        {/* Secondary ghost button */}
+        <a
+          href="#funcionamiento"
+          onClick={(e) => {
+            e.preventDefault()
+            document.querySelector('#funcionamiento')?.scrollIntoView({ behavior: 'smooth' })
+          }}
+          className="
+            w-full sm:w-auto px-8 py-4 font-mono font-black text-sm tracking-[0.2em] uppercase rounded-lg
+            border border-border-subtle text-text-muted hover:border-accent-teal hover:text-text-hero
+            hover:bg-accent-teal/5 transition-all duration-300 text-center
+          "
+        >
+          Ver Funcionamiento
         </a>
       </div>
-    </>
+    </div>
   )
 }

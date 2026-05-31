@@ -3,15 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --bg-void: #04040a;
-  --bg-surface: #0d0d1f;
-  --accent-cyan: #00f0ff;
-  --accent-violet: #9333ea;
-  --text-primary: #e2e8f0;
-  --text-dim: #475569;
-  --grid-line: rgba(0, 240, 255, 0.07);
-  --glow-cyan: rgba(0, 240, 255, 0.15);
-  --glow-violet: rgba(147, 51, 234, 0.2);
+  --bg-main: #09090b;
+  --bg-card: rgba(24, 24, 27, 0.6);
+  --accent-indigo: #6366f1;
+  --accent-teal: #14b8a6;
+  --text-hero: #ffffff;
+  --text-muted: #a1a1aa;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Fallbacks for backward compatibility with existing styles */
+  --bg-void: var(--bg-main);
+  --bg-surface: var(--bg-card);
+  --accent-cyan: var(--accent-indigo);
+  --accent-violet: var(--accent-teal);
+  --text-primary: var(--text-hero);
+  --text-dim: var(--text-muted);
+  --grid-line: rgba(99, 102, 241, 0.07);
+  --glow-cyan: rgba(99, 102, 241, 0.15);
+  --glow-violet: rgba(20, 184, 166, 0.25);
 }
 
 *,

@@ -90,19 +90,20 @@ float vignette(vec2 uv, float scrollProg) {
 void main() {
   vec2 uv = vUv;
 
-  vec3 bgColor   = vec3(0.016, 0.016, 0.039);  // #04040a
-  vec3 cyanColor = vec3(0.0,   0.941, 1.0);     // #00f0ff
+  vec3 bgColor     = vec3(0.035, 0.035, 0.043);  // #09090b
+  vec3 indigoColor = vec3(0.388, 0.400, 0.945);  // #6366f1
+  vec3 tealColor   = vec3(0.078, 0.722, 0.651);  // #14b8a6
 
   // Layer 1 — data grid
   float grid = dataGrid(uv, uTime);
-  vec3 col   = bgColor + cyanColor * grid;
+  vec3 col   = bgColor + indigoColor * grid;
 
   // Layer 2 — particles
   float ptcl = particles(uv, uTime, uMouse);
-  col += cyanColor * ptcl * 0.45;
+  col += indigoColor * ptcl * 0.45;
 
-  // Subtle violet tint on particle peaks
-  col += vec3(0.573, 0.2, 0.918) * ptcl * 0.12;  // #9333ea
+  // Subtle teal tint on particle peaks
+  col += tealColor * ptcl * 0.15;
 
   // Layer 3 — vignette
   float vig = vignette(uv, uScrollProgress);

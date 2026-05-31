@@ -35,17 +35,17 @@ vi.mock('gsap', async () => {
 
 describe('HeroSection', () => {
   it('renders hero container', () => {
-    const { getByTestId } = render(<HeroSection />)
+    const { getByTestId } = render(<HeroSection gl={null} />)
     expect(getByTestId('hero-container')).toBeInTheDocument()
   })
 
-  it('renders YARBIZ heading', () => {
-    const { getByText } = render(<HeroSection />)
-    expect(getByText('YARBIZ')).toBeInTheDocument()
+  it('renders YARVIZ heading label', () => {
+    const { getAllByText } = render(<HeroSection gl={null} />)
+    expect(getAllByText(/YARVIZ/i).length).toBeGreaterThan(0)
   })
 
   it('renders CTA link', () => {
-    const { getByRole } = render(<HeroSection />)
-    expect(getByRole('link', { name: /get your kit/i })).toBeInTheDocument()
+    const { getByRole } = render(<HeroSection gl={null} />)
+    expect(getByRole('link', { name: /comenzar ahora/i })).toBeInTheDocument()
   })
 })
