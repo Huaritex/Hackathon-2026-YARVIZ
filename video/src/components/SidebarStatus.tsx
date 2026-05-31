@@ -113,6 +113,7 @@ function PipelineRow({
   const isValidated = frame >= validationFrame;
 
   // ─── Dot color: gray → teal over VALIDATION_COLOR_DURATION frames ──────────
+  // GSAP power2.out matches spec's "smooth hue/saturation shift" requirement
   const dotColorT = interpolate(
     frame,
     [validationFrame, validationFrame + VALIDATION_COLOR_DURATION],
@@ -120,7 +121,7 @@ function PipelineRow({
     {
       extrapolateLeft: "clamp",
       extrapolateRight: "clamp",
-      easing: Easing.snappyOut,
+      easing: Easing.power2Out,
     }
   );
   const dotColor = isValidated
