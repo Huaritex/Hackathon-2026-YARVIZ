@@ -54,18 +54,18 @@ export const InteractiveDropdown: React.FC<InteractiveDropdownProps> = ({
 
   // ── Menu box entrance ──────────────────────────────────────────────────────
 
-  // scaleY: 0.8 → 1.0 over 6 frames
+  // scaleY: 0.8 → 1.0 over 6 frames — spec requires axis-isolated Y scale + backOut pop
   const scaleY = interpolate(frame, [openFrame, openFrame + 6], [0.8, 1.0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.backOut,
   });
 
-  // opacity: 0 → 1 over 6 frames
+  // opacity: 0 → 1 over 6 frames — fast sweep with expo.out
   const opacity = interpolate(frame, [openFrame, openFrame + 6], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.sharpOut,
+    easing: Easing.expoOut,
   });
 
   // ── Selection marker spring ────────────────────────────────────────────────
