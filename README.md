@@ -150,7 +150,7 @@ YARVIZ opera mediante un modelo de negocio de **Suscripción y Descarga Digital 
 
 ---
 
-## 📅 Hoja de Ruta (Roadmap)
+## 📅 Posible Hoja de Ruta (Roadmap) 
 
 ### Fase 1: Lanzamiento de Ecosistema Open-Source (Q3 2026)
 * Liberación de planos 3D del chasis YARVIZ Pocket y Tapa Deslizable.
