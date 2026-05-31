@@ -1,16 +1,22 @@
 /**
  * GlobalCamera.tsx
  *
- * Virtual camera wrapper for the YARVIZ promo composition.
- * Applies frame-based transforms: scale, translate, and motion blur.
+ * Virtual camera wrapper. Applies deterministic per-frame scale+translate+
+ * motion-blur transforms to the entire composition (the "macro virtual camera").
  *
- * All animations are deterministic and frame-based using interpolate() from Remotion.
- * NO CSS transitions, NO CSS animations, NO random() calls.
+ * Architecture:
+ *   - CAMERA_SHOTS defines waypoints: each shot's _target_ state plus the frame
+ *     range over which the camera moves FROM the previous state TO the target.
+ *   - getCameraState() finds the two bracketing waypoints for any frame and
+ *     interpolates between them with the shot's GSAP ease.
+ *   - Motion blur is derived from the velocity vector between adjacent frames.
+ *
+ * No CSS transitions / CSS animations / random() calls anywhere.
  */
 
 import { interpolate } from "remotion";
 import React from "react";
-import { Easing } from "../lib/easing";
+import { Easing, EasingFn } from "../lib/easing";
 import { motionBlur } from "../lib/timing";
 
 interface GlobalCameraProps {
@@ -18,266 +24,134 @@ interface GlobalCameraProps {
   children: React.ReactNode;
 }
 
-interface CameraShot {
-  readonly startFrame: number;
-  readonly endFrame: number;
+interface CameraWaypoint {
+  /** The frame at which this waypoint's target state is fully reached. */
+  readonly frame: number;
+  /** Target scale at this waypoint. */
   readonly scale: number;
+  /** Target translate-x (px) at this waypoint. */
   readonly tx: number;
+  /** Target translate-y (px) at this waypoint. */
   readonly ty: number;
+  /** GSAP easing to apply from the PREVIOUS waypoint to this one. */
+  readonly ease: EasingFn;
   readonly label: string;
 }
 
 /**
- * Camera shots timeline (all at 60fps).
- * Each shot defines the scale, translate-x, translate-y over a frame range.
+ * Master camera waypoint timeline (60fps).
+ * The camera moves FROM each waypoint's previous state TO the next waypoint
+ * over the frame range between them, using the indicated GSAP ease.
  */
-const CAMERA_SHOTS: readonly CameraShot[] = [
-  // Scene 1: Static, slightly zoomed in on center
-  {
-    startFrame: 0,
-    endFrame: 60,
-    scale: 1.02,
-    tx: 0,
-    ty: 0,
-    label: "scene1-boot",
-  },
+const WAYPOINTS: readonly CameraWaypoint[] = [
+  // Scene 1: Boot — static, subtle zoom in
+  { frame: 0,   scale: 1.02, tx: 0,   ty: 0,   ease: Easing.linear,   label: "boot-start" },
 
-  // Scene 2 opening: whip-pan zoom to top-left (VOICE ENGINE focus at frame 90)
-  {
-    startFrame: 60,
-    endFrame: 68,
-    scale: 1.15,
-    tx: -60,
-    ty: -30,
-    label: "scene2-wipe",
-  },
-  {
-    startFrame: 68,
-    endFrame: 90,
-    scale: 1.08,
-    tx: -30,
-    ty: -15,
-    label: "scene2-settle",
-  },
-  {
-    startFrame: 90,
-    endFrame: 210,
-    scale: 1.05,
-    tx: -20,
-    ty: -10,
-    label: "scene2-focus",
-  },
+  // Scene 2: Whip-pan to VOICE ENGINE over 8 frames (sharp power4.in push)
+  { frame: 68,  scale: 1.15, tx: -60, ty: -30, ease: Easing.power4In,  label: "whip-pan-peak" },
+  // Settle to focus state over 22 frames (GSAP expo.out deceleration)
+  { frame: 90,  scale: 1.05, tx: -20, ty: -10, ease: Easing.expoOut,   label: "voice-focus" },
+  // Hold focus through dashboard display
+  { frame: 210, scale: 1.05, tx: -20, ty: -10, ease: Easing.linear,    label: "focus-hold" },
 
-  // Scene 2 second camera move
-  {
-    startFrame: 210,
-    endFrame: 218,
-    scale: 1.12,
-    tx: 0,
-    ty: 20,
-    label: "scene2-pan2",
-  },
-  {
-    startFrame: 218,
-    endFrame: 240,
-    scale: 1.03,
-    tx: 0,
-    ty: 0,
-    label: "scene2-settle2",
-  },
+  // Scene 2 → 3: Second camera move — pan down to show full log output (8 frames)
+  { frame: 218, scale: 1.12, tx: 0,   ty: 20,  ease: Easing.power4In,  label: "pan2-peak" },
+  // Pull back to neutral for Scene 3 (GSAP circ.out arc deceleration)
+  { frame: 240, scale: 1.0,  tx: 0,   ty: 0,   ease: Easing.circOut,   label: "pullback" },
 
-  // Scene 3: Pull back to show full dashboard
-  {
-    startFrame: 240,
-    endFrame: 255,
-    scale: 1.0,
-    tx: 0,
-    ty: 0,
-    label: "scene3-pullback",
-  },
-  {
-    startFrame: 255,
-    endFrame: 420,
-    scale: 1.0,
-    tx: 0,
-    ty: 0,
-    label: "scene3-static",
-  },
+  // Scene 3: Static — validation domino runs at native composition scale
+  { frame: 420, scale: 1.0,  tx: 0,   ty: 0,   ease: Easing.linear,    label: "scene3-static" },
 
-  // Scene 4: Macro zoom into dropdown area (right side, slightly down)
-  {
-    startFrame: 420,
-    endFrame: 428,
-    scale: 1.18,
-    tx: 80,
-    ty: 40,
-    label: "scene4-macrozoom",
-  },
-  {
-    startFrame: 428,
-    endFrame: 600,
-    scale: 1.12,
-    tx: 60,
-    ty: 30,
-    label: "scene4-focused",
-  },
+  // Scene 4: Macro zoom into dropdown area (8-frame sharp push, right + slight down)
+  { frame: 428, scale: 1.18, tx: 80,  ty: 40,  ease: Easing.power4In,  label: "dropdown-zoom-peak" },
+  // Settle onto dropdown focus (expo.out)
+  { frame: 450, scale: 1.12, tx: 60,  ty: 30,  ease: Easing.expoOut,   label: "dropdown-settled" },
+  // Hold through Scene 4
+  { frame: 600, scale: 1.12, tx: 60,  ty: 30,  ease: Easing.linear,    label: "dropdown-hold" },
 
-  // Scene 5: Snap back to center, slight zoom out
-  {
-    startFrame: 600,
-    endFrame: 608,
-    scale: 1.0,
-    tx: 0,
-    ty: 0,
-    label: "scene5-reset",
-  },
-  {
-    startFrame: 608,
-    endFrame: 720,
-    scale: 1.0,
-    tx: 0,
-    ty: 0,
-    label: "scene5-final",
-  },
+  // Scene 5: Snap back to center (8-frame whip, flash masks it)
+  { frame: 608, scale: 1.0,  tx: 0,   ty: 0,   ease: Easing.expoOut,   label: "outro-snap" },
+
+  // Final outro — slow breathing zoom-out (1.05 → 1.0 over remaining frames)
+  { frame: 660, scale: 1.05, tx: 0,   ty: 0,   ease: Easing.sineInOut, label: "outro-breathe" },
+  { frame: 720, scale: 1.0,  tx: 0,   ty: 0,   ease: Easing.sineInOut, label: "outro-end" },
 ] as const;
 
-/**
- * Determines which easing to use based on shot duration.
- * Fast transitions (8 frames) use snappyOut; slow transitions use linear.
- */
-function getEasingForShot(shot: CameraShot): (t: number) => number {
-  const duration = shot.endFrame - shot.startFrame;
-  if (duration <= 8) {
-    return Easing.snappyOut;
-  }
-  return Easing.linear;
+// ─── Camera state resolver ────────────────────────────────────────────────────
+
+interface CameraState {
+  scale: number;
+  tx: number;
+  ty: number;
 }
 
-/**
- * Get camera state at any frame by interpolating between shots.
- * Automatically handles transitions between adjacent shots.
- */
-function getCameraState(
-  frame: number
-): { scale: number; tx: number; ty: number } {
-  // Clamp frame to composition bounds
-  const clampedFrame = Math.max(0, Math.min(frame, 720));
+function getCameraState(frame: number): CameraState {
+  const f = Math.max(0, Math.min(frame, 720));
 
-  // Find all shots that are active or adjacent to this frame
-  let activeShot: CameraShot | null = null;
-  let nextShot: CameraShot | null = null;
-
-  for (let i = 0; i < CAMERA_SHOTS.length; i++) {
-    const shot = CAMERA_SHOTS[i];
-    if (clampedFrame >= shot.startFrame && clampedFrame <= shot.endFrame) {
-      activeShot = shot;
-      // Look ahead for next shot
-      if (i + 1 < CAMERA_SHOTS.length) {
-        nextShot = CAMERA_SHOTS[i + 1];
-      }
+  // Find the two waypoints that bracket this frame
+  let fromIdx = 0;
+  for (let i = 0; i < WAYPOINTS.length - 1; i++) {
+    if (f >= WAYPOINTS[i].frame && f <= WAYPOINTS[i + 1].frame) {
+      fromIdx = i;
       break;
     }
+    // Past all waypoints → use last pair
+    fromIdx = WAYPOINTS.length - 2;
   }
 
-  // Fallback: use last shot if past all shots
-  if (!activeShot) {
-    activeShot = CAMERA_SHOTS[CAMERA_SHOTS.length - 1];
+  const from = WAYPOINTS[fromIdx];
+  const to = WAYPOINTS[fromIdx + 1];
+
+  if (from.frame === to.frame) {
+    return { scale: to.scale, tx: to.tx, ty: to.ty };
   }
 
-  // If we're at the start of a transition, blend to the next shot
-  // Otherwise, stay within the current shot
-  const isTransitioning = nextShot && clampedFrame === activeShot.endFrame;
+  const ease = to.ease;
 
-  if (isTransitioning && nextShot) {
-    // Transition from activeShot to nextShot
-    const easing = getEasingForShot(nextShot);
-    const scale = interpolate(clampedFrame, [activeShot.endFrame, nextShot.endFrame], [activeShot.scale, nextShot.scale], {
-      easing,
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    });
-    const tx = interpolate(clampedFrame, [activeShot.endFrame, nextShot.endFrame], [activeShot.tx, nextShot.tx], {
-      easing,
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    });
-    const ty = interpolate(clampedFrame, [activeShot.endFrame, nextShot.endFrame], [activeShot.ty, nextShot.ty], {
-      easing,
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    });
-    return { scale, tx, ty };
-  }
-
-  // Within a shot: interpolate within the shot's frame range
-  const easing = getEasingForShot(activeShot);
-  const scale = interpolate(
-    clampedFrame,
-    [activeShot.startFrame, activeShot.endFrame],
-    [activeShot.scale, activeShot.scale],
-    {
-      easing,
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    }
-  );
-  const tx = interpolate(
-    clampedFrame,
-    [activeShot.startFrame, activeShot.endFrame],
-    [activeShot.tx, activeShot.tx],
-    {
-      easing,
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    }
-  );
-  const ty = interpolate(
-    clampedFrame,
-    [activeShot.startFrame, activeShot.endFrame],
-    [activeShot.ty, activeShot.ty],
-    {
-      easing,
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    }
-  );
+  const scale = interpolate(f, [from.frame, to.frame], [from.scale, to.scale], {
+    easing: ease,
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const tx = interpolate(f, [from.frame, to.frame], [from.tx, to.tx], {
+    easing: ease,
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const ty = interpolate(f, [from.frame, to.frame], [from.ty, to.ty], {
+    easing: ease,
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return { scale, tx, ty };
 }
 
-/**
- * Compute motion blur amount based on velocity.
- * velocity = distance moved between current and previous frame.
- */
-function computeMotionBlur(
-  currentTx: number,
-  currentTy: number,
-  prevTx: number,
-  prevTy: number
-): number {
-  const deltaX = currentTx - prevTx;
-  const deltaY = currentTy - prevTy;
-  const velocity = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-  return motionBlur(velocity);
+// ─── Motion blur ──────────────────────────────────────────────────────────────
+
+function computeMotionBlur(curr: CameraState, prev: CameraState): number {
+  const dTx = curr.tx - prev.tx;
+  const dTy = curr.ty - prev.ty;
+  const dS = (curr.scale - prev.scale) * 200; // scale delta amplified for blur feel
+  const velocity = Math.sqrt(dTx * dTx + dTy * dTy + dS * dS);
+  return motionBlur(velocity, 0.06);
 }
 
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export function GlobalCamera({ frame, children }: GlobalCameraProps): React.ReactElement {
-  const current = getCameraState(frame);
-  const previous = getCameraState(Math.max(0, frame - 1));
+  const curr = getCameraState(frame);
+  const prev = getCameraState(Math.max(0, frame - 1));
 
-  const blurAmount = computeMotionBlur(current.tx, current.ty, previous.tx, previous.ty);
-
-  const transformStyle = `scale(${current.scale}) translate(${current.tx}px, ${current.ty}px)`;
-
-  const filterStyle =
-    blurAmount > 0.3 ? `blur(${Math.min(blurAmount, 4)}px)` : undefined;
+  const blur = computeMotionBlur(curr, prev);
+  const filterStyle = blur > 0.3 ? `blur(${Math.min(blur, 3.5).toFixed(2)}px)` : undefined;
 
   return (
     <div
       style={{
         width: 1920,
         height: 1080,
-        transform: transformStyle,
+        transform: `scale(${curr.scale}) translate(${curr.tx}px, ${curr.ty}px)`,
         transformOrigin: "center center",
         filter: filterStyle,
         willChange: "transform",

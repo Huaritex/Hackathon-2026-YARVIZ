@@ -92,17 +92,18 @@ function PipelineRow({
   const { validationFrame } = item;
   const isVoiceEngine = index === VOICE_ENGINE_INDEX;
 
-  // ─── Appear: translateY + opacity ──────────────────────────────────────────
+  // ─── Appear: translateY + opacity (GSAP expoOut for snappy domino flow) ─────
   const appearOpacity = interpolate(frame, [appearStart, appearEnd], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.expoOut,
   });
 
-  const appearY = interpolate(frame, [appearStart, appearEnd], [8, 0], {
+  // Spec: "enters viewport from translateY(24px)" — domino layout flow
+  const appearY = interpolate(frame, [appearStart, appearEnd], [24, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.expoOut,
   });
 
   if (frame < appearStart) {
