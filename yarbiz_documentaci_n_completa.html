@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YARBIZ - Documentación Oficial Completa - Hackathon 2026</title>
+    <!-- Tailwind CSS para diseño responsivo y premium -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        slate: {
+                            950: '#0b1329',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons para iconografía moderna -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        code, pre {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .scroll-indicator {
+            transition: width 0.1s ease-out;
+        }
+        .interactive-pin:hover {
+            fill: #0ea5e9 !important;
+            filter: drop-shadow(0px 0px 4px #0ea5e9);
+            cursor: pointer;
+        }
+        .active-pin {
+            fill: #f43f5e !important;
+            filter: drop-shadow(0px 0px 8px #f43f5e);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+<div class="fixed top-0 left-0 w-full h-1 bg-slate-200 dark:bg-slate-800 z-50">
+    <div id="readProgress" class="h-full bg-brand-500 w-0 scroll-indicator"></div>
+</div>
+
+<header class="sticky top-0 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-40 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-brand-500/20">
+                Y
+            </div>
+            <div>
+                <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-brand-500 to-indigo-500 bg-clip-text text-transparent">YARBIZ</span>
+                <span class="text-xs block text-slate-500 dark:text-slate-400 font-medium">Documentación Técnica Completa v2.0</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- Selector de Modo Oscuro -->
+            <button id="darkModeToggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="Cambiar tema">
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
+                <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-slate-600"></i>
+            </button>
+            <button onclick="window.print()" class="hidden md:flex items-center gap-2 px-4 h-10 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-all shadow-md shadow-brand-600/15">
+                <i data-lucide="printer" class="w-4 h-4"></i> Imprimir / PDF
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow flex flex-col lg:flex-row gap-8">
+    <aside class="w-full lg:w-64 shrink-0 lg:sticky lg:top-24 h-fit max-h-[80vh] overflow-y-auto pr-2 border-r border-slate-100 dark:border-slate-800/50">
+        <nav class="space-y-1">
+            <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Contenido</p>
+            <a href="#capitulo1" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-brand-600 bg-brand-50 dark:bg-brand-950/50 dark:text-brand-400">
+                <i data-lucide="compass" class="w-4 h-4"></i> Cap I: Problema y Objetivos
+            </a>
+            <a href="#capitulo2" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                <i data-lucide="users" class="w-4 h-4"></i> Cap II: Público e Investigación
+            </a>
+            <a href="#capitulo3" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                <i data-lucide="cpu" class="w-4 h-4"></i> Cap III: Alcance e Interfaz
+            </a>
+            <a href="#capitulo4" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                <i data-lucide="git-fork" class="w-4 h-4"></i> Cap IV: Arquitectura y Planos
+            </a>
+            <a href="#capitulo5" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                <i data-lucide="check-square" class="w-4 h-4"></i> Cap V: Pruebas y Fotos Reales
+            </a>
+            <a href="#capitulo6" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                <i data-lucide="award" class="w-4 h-4"></i> Cap VI: Conclusiones
+            </a>
+            <a href="#canvas" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                <i data-lucide="grid" class="w-4 h-4"></i> Lean Canvas & Viabilidad
+            </a>
+        </nav>
+        
+        <div class="mt-8 p-4 rounded-xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white border border-slate-800 shadow-xl">
+            <h4 class="font-bold text-xs uppercase text-brand-400 tracking-wider mb-1">Hackathon 2026</h4>
+            <p class="text-sm font-semibold">Proyecto YARBIZ</p>
+            <p class="text-[11px] text-slate-400 mt-2">Desarrollado para mitigar la desorientación en Santa Cruz de la Sierra mediante IA y Hardware Embebido.</p>
+        </div>
+    </aside>
+
+    <main class="flex-grow max-w-4xl space-y-16">
+        
+        <!-- Portada del Documento -->
+        <section class="text-center py-12 border-b border-slate-200 dark:border-slate-800/60">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-950/50 dark:text-brand-400 border border-brand-200 dark:border-brand-900/50 mb-4">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> INVESTIGACIÓN & PROTOTIPO FUNCIONAL
+            </span>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-slate-900 via-brand-600 to-indigo-600 dark:from-white dark:via-brand-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                YARBIZ: ASISTENTE COGNITIVO URBANO
+            </h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8">
+                Mitigación de la desorientación espacial en Santa Cruz de la Sierra mediante IA distribuida y hardware de bajo costo basado en ESP32.
+            </p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-left">
+                <div>
+                    <span class="text-[11px] text-slate-400 block uppercase font-bold tracking-wider">Presentado por</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Jose Miguel Salinas Z.</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300 block">Enrique H. Molina M.</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block uppercase font-bold tracking-wider">Colaboradores</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Sebastian Guarachi A.</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300 block">Marcelo A. Duran S.</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block uppercase font-bold tracking-wider">Ubicación</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Santa Cruz, Bolivia</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block uppercase font-bold tracking-wider">Año de Proyecto</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">2026</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO I -->
+        <section id="capitulo1" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm">I</span>
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-white">Capítulo I: Planteamiento del Problema</h2>
+            </div>
+            
+            <div class="prose prose-slate dark:prose-invert max-w-none space-y-4">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200">1.1 Descripción de la situación problemática</h3>
+                <p class="text-slate-600 dark:text-slate-350 leading-relaxed">
+                    Santa Cruz de la Sierra es una metrópoli gigantesca y en constante crecimiento, cuya velocidad de expansión vuela por delante de la planificación tradicional. Su estructura urbana de anillos y radiales suele desorientar críticamente a visitantes de provincias, turistas y residentes de zonas periféricas. En este escenario, la señalética estática resulta insuficiente; el extravío urbano es común, traduciéndose en una pérdida crítica de tiempo, mayor consumo de combustible de transporte público/privado y un incremento en la ansiedad e inseguridad del peatón.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 mt-6">1.2 Objetivos de la investigación</h3>
+                <div class="p-5 rounded-xl bg-brand-50/50 dark:bg-brand-950/20 border border-brand-100 dark:border-brand-900/30">
+                    <h4 class="font-bold text-brand-800 dark:text-brand-300 text-sm uppercase tracking-wider mb-2">Objetivo General</h4>
+                    <p class="text-slate-700 dark:text-slate-300 font-medium">
+                        Idear, diseñar, programar y montar un prototipo funcional de asistente virtual físico e híbrido denominado <strong>YARBIZ</strong>, basado en el microcontrolador ESP32, interfaces holográficas de bajo costo e inteligencia artificial distribuida, para mitigar la desorientación espacial en puntos críticos de alta convergencia peatonal en la metrópoli de Santa Cruz de la Sierra mediante una interfaz de lenguaje natural conversacional en tiempo real.
+                    </p>
+                </div>
+                
+                <h4 class="font-semibold text-slate-900 dark:text-slate-250 mt-4">Objetivos específicos</h4>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 list-none p-0">
+                    <li class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 flex gap-3">
+                        <span class="text-brand-500 font-bold">1.</span>
+                        <span class="text-sm text-slate-600 dark:text-slate-450"><strong class="text-slate-850 dark:text-slate-300 block">Requerimientos y campo:</strong> Identificar y mapear las zonas de mayor complejidad vial, congestión vehicular y flujo peatonal en la ciudad de Santa Cruz.</span>
+                    </li>
+                    <li class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 flex gap-3">
+                        <span class="text-brand-500 font-bold">2.</span>
+                        <span class="text-sm text-slate-600 dark:text-slate-450"><strong class="text-slate-850 dark:text-slate-300 block">Diseño en Bloques:</strong> Dividir la topología de YARBIZ en bloques desacoplados: Captura Acústica, Procesamiento Cognitivo (Nube/Python) y Retroalimentación Holográfica.</span>
+                    </li>
+                    <li class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 flex gap-3">
+                        <span class="text-brand-500 font-bold">3.</span>
+                        <span class="text-sm text-slate-600 dark:text-slate-450"><strong class="text-slate-850 dark:text-slate-300 block">Diseño Eléctrico:</strong> Desarrollar el diagrama de conexiones detallado entre el ESP32, periféricos lógicos y amplificadores, asegurando robustez energética.</span>
+                    </li>
+                    <li class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 flex gap-3">
+                        <span class="text-brand-500 font-bold">4.</span>
+                        <span class="text-sm text-slate-600 dark:text-slate-450"><strong class="text-slate-850 dark:text-slate-300 block">Diseño de la estructura:</strong> Definir un chasis estético y antivandálico para integrarse armoniosamente en el mobiliario de Santa Cruz de la Sierra.</span>
+                    </li>
+                    <li class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 flex gap-3">
+                        <span class="text-brand-500 font-bold">5.</span>
+                        <span class="text-sm text-slate-600 dark:text-slate-450"><strong class="text-slate-850 dark:text-slate-300 block">Desarrollo lógicos:</strong> Programar firmware embebido ESP32 y scripts de procesamiento en Python, adaptando el corpus a nombres viales coloquiales.</span>
+                    </li>
+                    <li class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 flex gap-3">
+                        <span class="text-brand-500 font-bold">6.</span>
+                        <span class="text-sm text-slate-600 dark:text-slate-450"><strong class="text-slate-850 dark:text-slate-300 block">Validación y Ajuste:</strong> Ensamblar el prototipo físico final y conducirlo a pruebas de campo en escenarios viales de Santa Cruz de la Sierra.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO II -->
+        <section id="capitulo2" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm">II</span>
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-white">Capítulo II: Investigación de Campo e Inclusión</h2>
+            </div>
+            
+            <div class="prose prose-slate dark:prose-invert max-w-none space-y-4">
+                <p class="text-slate-600 dark:text-slate-350 leading-relaxed">
+                    A través de encuestas, observación directa y análisis demográfico, se establecieron los puntos idóneos de despliegue estratégico en la ciudad de Santa Cruz, adaptándolos a las necesidades particulares de la población y el público del hackathon.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-6">
+                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <span class="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 inline-block mb-3">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            </span>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Puntos Críticos de Despliegue</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Intercambiadores de tráfico viales, centros de abasto y nodos periféricos congestionados donde confluyen peatones sin guía dinámica.</p>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <span class="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 inline-block mb-3">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </span>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Accesibilidad de Usuarios</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">La interfaz conversacional por voz y la pantalla táctil asisten a adultos mayores, discapacitados visuales e iletrados de manera interactiva.</p>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <span class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 inline-block mb-3">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            </span>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Público STEM / Académico</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Profesores, estudiantes y entusiastas que buscan construir su propio hardware inteligente y modular a bajo costo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO III -->
+        <section id="capitulo3" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm">III</span>
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-white">Capítulo III: Alcance de Estudio y Funcionalidades</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200">3.1 Lista de Materiales del Proyecto (BOM)</h3>
+                <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-850 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase text-xs font-bold">
+                                <th class="p-4">Item</th>
+                                <th class="p-4">Descripción</th>
+                                <th class="p-4">Etiqueta</th>
+                                <th class="p-4">Configuración de Pines</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-150 dark:divide-slate-800/50 text-slate-700 dark:text-slate-350">
+                            <tr>
+                                <td class="p-4 font-semibold">1</td>
+                                <td class="p-4">Microcontrolador ESP32 DevKit V1</td>
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs">ESP32</span></td>
+                                <td class="p-4 font-mono text-xs text-brand-500">Wi-Fi/BT - 38 Pines</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">2</td>
+                                <td class="p-4">Micrófono omnidireccional digital</td>
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs">MIC_USB</span></td>
+                                <td class="p-4 font-mono text-xs text-brand-500">I2S / USB Host Receiver</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">3</td>
+                                <td class="p-4">Amplificador I2S MAX98357A</td>
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs">AMP_I2S</span></td>
+                                <td class="p-4 font-mono text-xs text-brand-500">GPIO 26 (BCLK), 25 (LRC), 27 (DIN)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">4</td>
+                                <td class="p-4">Parlante 3W 4 Ohm</td>
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs">SPEAKER</span></td>
+                                <td class="p-4 font-mono text-xs text-brand-500">Conectado a salidas AMP_I2S</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">5</td>
+                                <td class="p-4">Pantalla OLED 1.3" I2C</td>
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs">OLED</span></td>
+                                <td class="p-4 font-mono text-xs text-brand-500">GPIO 22 (SCL), 21 (SDA)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">6</td>
+                                <td class="p-4">Sensor de presencia Ultrasónico HC-SR04</td>
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs">HCSR04</span></td>
+                                <td class="p-4 font-mono text-xs text-brand-500">GPIO 5 (TRIG), 18 (ECHO)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">7</td>
+                                <td class="p-4">Sensor de ruido analógico LM393</td>
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-xs">MIC_SNS</span></td>
+                                <td class="p-4 font-mono text-xs text-brand-500">GPIO 34 (A0 / Analog In)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 mt-8">3.2 Matriz de Funcionalidades Principales</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex gap-3">
+                        <i data-lucide="eye" class="w-5 h-5 text-brand-500 shrink-0 mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900 dark:text-white">Detección de Presencia</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">El sensor HC-SR04 activa el asistente cuando detecta presencia a menos de 1m, saliendo del estado sleep.</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex gap-3">
+                        <i data-lucide="message-square-code" class="w-5 h-5 text-brand-500 shrink-0 mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900 dark:text-white">Soporte de Modismos Locales</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">El modelo de lenguaje está configurado para interpretar la jerga de Santa Cruz ("4to anillo", "Los Pozos", "Equipetrol").</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex gap-3">
+                        <i data-lucide="brain" class="w-5 h-5 text-brand-500 shrink-0 mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900 dark:text-white">Memoria Contextual de Sesión</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Recuerda el destino seleccionado y permite preguntas continuas sin necesidad de repetir la ubicación inicial.</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex gap-3">
+                        <i data-lucide="zap" class="w-5 h-5 text-brand-500 shrink-0 mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900 dark:text-white">Bajo Consumo de Energía</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Tras 5 minutos de inactividad, el dispositivo entra en deep-sleep, reduciendo el consumo eléctrico total.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO IV -->
+        <section id="capitulo4" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm">IV</span>
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-white">Capítulo IV: Arquitectura, Diagramas y Conexiones</h2>
+            </div>
+            
+            <div class="space-y-8">
+                <!-- DIAGRAMA DE BLOQUES -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                        <i data-lucide="layout-grid" class="w-4 h-4 text-brand-500"></i> 4.1 Diagrama de Bloques Funcionales
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Esquema conceptual interactivo que representa los flujos de señal lógica y de potencia en el sistema YARBIZ.</p>
+                    
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex justify-center">
+                        <!-- DIAGRAMA DE BLOQUES SVG -->
+                        <svg viewBox="0 0 800 360" class="w-full h-auto max-w-3xl">
+                            <!-- Entradas -->
+                            <rect x="20" y="40" width="160" height="70" rx="10" fill="#0ea5e9" fill-opacity="0.1" stroke="#0ea5e9" stroke-width="2"/>
+                            <text x="100" y="80" text-anchor="middle" font-weight="bold" fill="#0ea5e9" font-size="14">ENTRADAS</text>
+                            <text x="100" y="100" text-anchor="middle" fill="#64748b" font-size="11">Micrófono & Botón</text>
+
+                            <!-- Control (ESP32) -->
+                            <rect x="280" y="40" width="240" height="120" rx="10" fill="#6366f1" fill-opacity="0.1" stroke="#6366f1" stroke-width="2"/>
+                            <text x="400" y="80" text-anchor="middle" font-weight="bold" fill="#6366f1" font-size="16">PROCESADOR CENTRAL</text>
+                            <text x="400" y="105" text-anchor="middle" font-weight="bold" fill="#4f46e5" font-size="14">ESP32 DevKit V1</text>
+                            <text x="400" y="130" text-anchor="middle" fill="#64748b" font-size="11">Filtro lógicos & I2S Output</text>
+
+                            <!-- Servidor Cloud -->
+                            <rect x="280" y="220" width="240" height="100" rx="10" fill="#14b8a6" fill-opacity="0.1" stroke="#14b8a6" stroke-width="2" stroke-dasharray="4"/>
+                            <text x="400" y="255" text-anchor="middle" font-weight="bold" fill="#14b8a6" font-size="14">CEREBRO IA (Python)</text>
+                            <text x="400" y="275" text-anchor="middle" fill="#64748b" font-size="11">Whisper TTS & LLMs Locales</text>
+                            <text x="400" y="295" text-anchor="middle" fill="#64748b" font-size="11">Base de Datos Memoria</text>
+
+                            <!-- Salidas -->
+                            <rect x="620" y="40" width="160" height="70" rx="10" fill="#f43f5e" fill-opacity="0.1" stroke="#f43f5e" stroke-width="2"/>
+                            <text x="700" y="80" text-anchor="middle" font-weight="bold" fill="#f43f5e" font-size="14">SALIDAS</text>
+                            <text x="700" y="100" text-anchor="middle" fill="#64748b" font-size="11">OLED & MAX98357A</text>
+
+                            <!-- Sensores -->
+                            <rect x="20" y="220" width="160" height="100" rx="10" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="2"/>
+                            <text x="100" y="255" text-anchor="middle" font-weight="bold" fill="#f59e0b" font-size="14">SENSORES</text>
+                            <text x="100" y="280" text-anchor="middle" fill="#64748b" font-size="11">HC-SR04 Presencia</text>
+                            <text x="100" y="295" text-anchor="middle" fill="#64748b" font-size="11">LM393 Sonido</text>
+
+                            <!-- Flechas y Flujos -->
+                            <path d="M 180 75 L 280 75" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                            <path d="M 520 75 L 620 75" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                            <path d="M 180 270 L 280 270" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                            <path d="M 100 220 L 100 110" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)"/>
+                            <path d="M 370 160 L 370 220" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                            <path d="M 430 220 L 430 160" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+                            <!-- Definición de Marcadores -->
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- DIAGRAMA DE FLUJO -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                        <i data-lucide="git-commit" class="w-4 h-4 text-brand-500"></i> 4.2 Diagrama de Flujo de Programación (Secuencial)
+                    </h3>
+                    
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center max-w-4xl mx-auto">
+                            <div class="w-full md:w-36 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <span class="font-bold text-xs text-brand-600 block mb-1">Paso 1</span>
+                                <span class="text-xs font-semibold">Captura de Voz</span>
+                            </div>
+                            <i data-lucide="arrow-right" class="w-5 h-5 text-slate-400 rotate-90 md:rotate-0"></i>
+                            <div class="w-full md:w-36 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <span class="font-bold text-xs text-brand-600 block mb-1">Paso 2</span>
+                                <span class="text-xs font-semibold">Voz a Texto (Whisper)</span>
+                            </div>
+                            <i data-lucide="arrow-right" class="w-5 h-5 text-slate-400 rotate-90 md:rotate-0"></i>
+                            <div class="w-full md:w-36 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <span class="font-bold text-xs text-brand-600 block mb-1">Paso 3</span>
+                                <span class="text-xs font-semibold">Inferencia de IA (Ollama)</span>
+                            </div>
+                            <i data-lucide="arrow-right" class="w-5 h-5 text-slate-400 rotate-90 md:rotate-0"></i>
+                            <div class="w-full md:w-36 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <span class="font-bold text-xs text-brand-600 block mb-1">Paso 4</span>
+                                <span class="text-xs font-semibold">Generar Audio (TTS)</span>
+                            </div>
+                            <i data-lucide="arrow-right" class="w-5 h-5 text-slate-400 rotate-90 md:rotate-0"></i>
+                            <div class="w-full md:w-36 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <span class="font-bold text-xs text-brand-600 block mb-1">Paso 5</span>
+                                <span class="text-xs font-semibold">Reproducir & Animación</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIAGRAMA ELÉCTRICO E INTERACTIVO DE SEÑALES -->
+                <div class="space-y-4">
+                    <h3 id="esquematico" class="text-lg font-semibold text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                        <i data-lucide="binary" class="w-4 h-4 text-brand-500"></i> 4.3 Visualizador de Pines y Esquema Eléctrico
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        Selecciona cualquier señal de la tabla para ver su pin y ruta directamente iluminados en el esquema del microcontrolador ESP32 DevKit V1.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <!-- Tabla interactiva de Señales -->
+                        <div class="lg:col-span-6 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 dark:bg-slate-850 border-b border-slate-200 dark:border-slate-800 text-slate-400 uppercase font-bold">
+                                        <th class="p-3">Señal</th>
+                                        <th class="p-3">Pin ESP32</th>
+                                        <th class="p-3">Componente</th>
+                                        <th class="p-3">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-350">
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin22">
+                                        <td class="p-3 font-semibold text-blue-500">I2C SCL</td>
+                                        <td class="p-3 font-mono">GPIO 22</td>
+                                        <td class="p-3">Pantalla OLED</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin21">
+                                        <td class="p-3 font-semibold text-blue-500">I2C SDA</td>
+                                        <td class="p-3 font-mono">GPIO 21</td>
+                                        <td class="p-3">Pantalla OLED</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin26">
+                                        <td class="p-3 font-semibold text-indigo-500">I2S BCLK</td>
+                                        <td class="p-3 font-mono">GPIO 26</td>
+                                        <td class="p-3">Amplificador MAX98357A</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin25">
+                                        <td class="p-3 font-semibold text-indigo-500">I2S LRC</td>
+                                        <td class="p-3 font-mono">GPIO 25</td>
+                                        <td class="p-3">Amplificador MAX98357A</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin27">
+                                        <td class="p-3 font-semibold text-indigo-500">I2S DIN</td>
+                                        <td class="p-3 font-mono">GPIO 27</td>
+                                        <td class="p-3">Amplificador MAX98357A</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin5">
+                                        <td class="p-3 font-semibold text-emerald-500">TRIG</td>
+                                        <td class="p-3 font-mono">GPIO 5</td>
+                                        <td class="p-3">Ultrasónico HC-SR04</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin18">
+                                        <td class="p-3 font-semibold text-emerald-500">ECHO</td>
+                                        <td class="p-3 font-mono">GPIO 18</td>
+                                        <td class="p-3">Ultrasónico HC-SR04</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin19">
+                                        <td class="p-3 font-semibold text-amber-500">PULSADOR</td>
+                                        <td class="p-3 font-mono">GPIO 19</td>
+                                        <td class="p-3">Botón de Activación</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 cursor-pointer signal-row" data-pin="pin34">
+                                        <td class="p-3 font-semibold text-rose-500">ANALOG IN</td>
+                                        <td class="p-3 font-mono">GPIO 34</td>
+                                        <td class="p-3">Sensor LM393</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px]">Rastrear</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Microcontrolador ESP32 Interactivo SVG -->
+                        <div class="lg:col-span-6 p-4 rounded-2xl bg-slate-900 border border-slate-800 flex justify-center shadow-inner relative">
+                            <span class="absolute top-2 left-2 text-[10px] text-slate-500 font-mono">INTERACTIVE BOARD SCHEMATIC</span>
+                            <svg viewBox="0 0 320 480" class="w-full max-w-[280px] h-auto">
+                                <!-- Chip Antena -->
+                                <rect x="80" y="10" width="160" height="40" rx="3" fill="#111" stroke="#333" stroke-width="2"/>
+                                <path d="M 90 20 L 90 40 M 110 20 L 110 40 M 130 20 L 130 40 M 150 20 L 150 40 M 170 20 L 170 40 M 190 20 L 190 40 M 210 20 L 210 40 M 230 20 L 230 40" stroke="#f59e0b" stroke-width="1.5"/>
+
+                                <!-- Board Base -->
+                                <rect x="50" y="50" width="220" height="400" rx="10" fill="#064e3b" stroke="#047857" stroke-width="3"/>
+                                
+                                <!-- Core SoC -->
+                                <rect x="100" y="80" width="120" height="120" rx="5" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                                <text x="160" y="140" text-anchor="middle" font-family="monospace" fill="#e2e8f0" font-size="12" font-weight="bold">ESP32-WROOM</text>
+                                <text x="160" y="160" text-anchor="middle" font-family="monospace" fill="#64748b" font-size="9">CE FCC IC</text>
+
+                                <!-- Pins Izquierda -->
+                                <g id="left-pins">
+                                    <rect id="pin34" class="interactive-pin" x="35" y="110" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="25" y="118" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="8">G34</text>
+
+                                    <rect id="pin19" class="interactive-pin" x="35" y="140" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="25" y="148" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="8">G19</text>
+
+                                    <rect id="pin18" class="interactive-pin" x="35" y="170" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="25" y="178" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="8">G18</text>
+
+                                    <rect id="pin5" class="interactive-pin" x="35" y="200" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="25" y="208" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="8">G5</text>
+                                </g>
+
+                                <!-- Pins Derecha -->
+                                <g id="right-pins">
+                                    <rect id="pin21" class="interactive-pin" x="260" y="110" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="295" y="118" text-anchor="start" fill="#94a3b8" font-family="monospace" font-size="8">G21</text>
+
+                                    <rect id="pin22" class="interactive-pin" x="260" y="140" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="295" y="148" text-anchor="start" fill="#94a3b8" font-family="monospace" font-size="8">G22</text>
+
+                                    <rect id="pin25" class="interactive-pin" x="260" y="170" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="295" y="178" text-anchor="start" fill="#94a3b8" font-family="monospace" font-size="8">G25</text>
+
+                                    <rect id="pin26" class="interactive-pin" x="260" y="200" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="295" y="208" text-anchor="start" fill="#94a3b8" font-family="monospace" font-size="8">G26</text>
+
+                                    <rect id="pin27" class="interactive-pin" x="260" y="230" width="25" height="10" rx="2" fill="#334155" />
+                                    <text x="295" y="238" text-anchor="start" fill="#94a3b8" font-family="monospace" font-size="8">G27</text>
+                                </g>
+                                
+                                <!-- Indicador de conexión activa -->
+                                <circle id="led-indicator" cx="160" cy="380" r="8" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                                <text x="160" y="410" text-anchor="middle" font-family="monospace" fill="#64748b" font-size="8">ESTADO DE SEÑAL</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DISEÑO MECÁNICO EN 3D / BLUEPRINT -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-brand-500"></i> 4.4 Diseño Mecánico del Tótem YARBIZ (Prototipo Físico)
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Esquema tridimensional que ilustra la disposición ergonómica de los componentes e integración en el mobiliario.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                        <div class="md:col-span-4 space-y-3">
+                            <div class="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+                                <span class="font-bold block text-slate-950 dark:text-white">Sección Superior:</span>
+                                <span class="text-slate-500 dark:text-slate-400">Arreglo de micrófonos omnidireccionales con rejilla acústica de supresión de viento.</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+                                <span class="font-bold block text-slate-950 dark:text-white">Sección Media (Pantalla/Holograma):</span>
+                                <span class="text-slate-500 dark:text-slate-400">Display OLED y prisma reflector transparente de 1.3" inclinado a 45° para la interfaz táctil.</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+                                <span class="font-bold block text-slate-950 dark:text-white">Sección Inferior / Base:</span>
+                                <span class="text-slate-500 dark:text-slate-400">Fuente de alimentación y cajetín blindado del microcontrolador ESP32 con disipación térmica.</span>
+                            </div>
+                        </div>
+
+                        <!-- Render SVG del Tótem Metropolitano -->
+                        <div class="md:col-span-8 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex justify-center">
+                            <svg viewBox="0 0 400 500" class="w-full max-w-sm h-auto">
+                                <!-- Base Metálica -->
+                                <rect x="120" y="440" width="160" height="30" rx="3" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+                                <line x1="140" y1="440" x2="160" y2="400" stroke="#334155" stroke-width="4"/>
+                                <line x1="260" y1="440" x2="240" y2="400" stroke="#334155" stroke-width="4"/>
+
+                                <!-- Estructura Principal del Tótem -->
+                                <rect x="150" y="80" width="100" height="360" rx="5" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3" fill-opacity="0.9"/>
+                                <!-- Panel Frontal de Vidrio / Negro -->
+                                <rect x="155" y="90" width="90" height="340" rx="3" fill="#0f172a" />
+
+                                <!-- Pantalla Holográfica -->
+                                <rect x="165" y="110" width="70" height="70" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                                <polygon points="175,170 200,120 225,170" fill="#38bdf8" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2"/>
+                                <circle cx="200" cy="145" r="8" fill="#38bdf8" fill-opacity="0.8"/>
+                                <text x="200" y="195" text-anchor="middle" fill="#38bdf8" font-size="8" font-family="monospace">HOLOGRAM READY</text>
+
+                                <!-- Rejilla de Parlante -->
+                                <rect x="175" y="210" width="50" height="20" rx="2" fill="#1e293b" stroke="#475569"/>
+                                <circle cx="185" cy="220" r="2" fill="#475569"/>
+                                <circle cx="195" cy="220" r="2" fill="#475569"/>
+                                <circle cx="205" cy="220" r="2" fill="#475569"/>
+                                <circle cx="215" cy="220" r="2" fill="#475569"/>
+
+                                <!-- Caja de Electrónica (Ventana transparente para el Hackathon) -->
+                                <rect x="165" y="250" width="70" height="80" rx="4" fill="#022c22" stroke="#059669" stroke-width="1" stroke-dasharray="2"/>
+                                <rect x="180" y="270" width="40" height="40" rx="2" fill="#064e3b" stroke="#34d399"/>
+                                <text x="200" y="325" text-anchor="middle" fill="#34d399" font-size="8" font-family="monospace">ESP32 INNER</text>
+
+                                <!-- Botón de Activación -->
+                                <circle cx="200" cy="375" r="12" fill="#dc2626" stroke="#991b1b" stroke-width="2"/>
+                                <circle cx="200" cy="375" r="6" fill="#f87171"/>
+
+                                <!-- Líneas de acotación lateral -->
+                                <line x1="280" y1="80" x2="300" y2="80" stroke="#94a3b8" stroke-width="1"/>
+                                <line x1="280" y1="440" x2="300" y2="440" stroke="#94a3b8" stroke-width="1"/>
+                                <line x1="295" y1="80" x2="295" y2="440" stroke="#94a3b8" stroke-width="1"/>
+                                <text x="310" y="260" font-size="10" fill="#94a3b8" font-family="monospace" transform="rotate(90 310 260)">ALTURA: 1.50 METROS</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO V -->
+        <section id="capitulo5" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm">V</span>
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-white">Capítulo V: Pruebas de Simulación y Fotos Reales del Montaje</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <p class="text-slate-600 dark:text-slate-350 leading-relaxed">
+                    A continuación, se presentan los resultados analíticos del comportamiento del sistema y la representación de alta fidelidad técnica de las <strong>fotografías reales del prototipo físico</strong> montado y cableado por el equipo sobre protoboard.
+                </p>
+
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 mt-6">5.1 Registro de Resultados Físicos</h3>
+                <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-850 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase text-xs font-bold">
+                                <th class="p-4">Mapeo</th>
+                                <th class="p-4">Funcionalidad</th>
+                                <th class="p-4">Comportamiento Simulación (Wokwi)</th>
+                                <th class="p-4">Observaciones en Montaje Real</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-150 dark:divide-slate-800/50 text-slate-700 dark:text-slate-350">
+                            <tr>
+                                <td class="p-4 font-semibold">1</td>
+                                <td class="p-4">Detección de presencia ultrasónica</td>
+                                <td class="p-4 text-emerald-600 dark:text-emerald-400">Verificado OK</td>
+                                <td class="p-4">Activación precisa a < 1m de distancia.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">2</td>
+                                <td class="p-4">Pulsador táctil de wake-word</td>
+                                <td class="p-4 text-amber-600 dark:text-amber-400">Rebotes simulados</td>
+                                <td class="p-4">Corregido mediante retardo de software (debounce).</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">3</td>
+                                <td class="p-4">Decodificación DAC I2S</td>
+                                <td class="p-4 text-emerald-600 dark:text-emerald-400">Señales reloj limpias</td>
+                                <td class="p-4">Audio reproducido con nitidez por encima del ruido ambiente.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold">4</td>
+                                <td class="p-4">Latencia de Red (WebSockets)</td>
+                                <td class="p-4 text-emerald-600 dark:text-emerald-400">Conexión de prueba estable</td>
+                                <td class="p-4">Operación total fluida por debajo de la meta de los 3s.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 mt-8 flex items-center gap-2">
+                    <i data-lucide="camera" class="w-5 h-5 text-brand-500"></i> 5.2 Galería de Montaje Físico (Representaciones del Prototipo Real)
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Representación de la Foto 1: Micrófono Inalámbrico -->
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">FOTO REAL 1: CAPTURA DE AUDIO</span>
+                        <div class="h-64 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-4">
+                            <!-- SVG que representa fielmente la foto del micrófono lavalier inalámbrico sobre el tapete del mousepad de autos -->
+                            <svg viewBox="0 0 300 200" class="w-full h-full max-h-60">
+                                <!-- Fondo de circuito / tapete oscuro -->
+                                <rect x="10" y="10" width="280" height="180" rx="8" fill="#1e293b"/>
+                                <path d="M 10 50 L 290 120" stroke="#0ea5e9" stroke-width="0.5" stroke-dasharray="2"/>
+                                <path d="M 10 120 L 290 50" stroke="#0ea5e9" stroke-width="0.5" stroke-dasharray="2"/>
+                                
+                                <!-- Mano del operador sosteniendo el micrófono -->
+                                <path d="M 20 180 C 40 130, 80 120, 100 130 C 110 135, 120 150, 120 180" fill="#fbcfe8" opacity="0.4"/>
+                                
+                                <!-- Transmisor Lavalier Sostenido -->
+                                <rect x="70" y="90" width="30" height="60" rx="5" fill="#111" stroke="#333" stroke-width="2"/>
+                                <circle cx="85" cy="100" r="8" fill="#333"/> <!-- Espuma del micro -->
+                                <circle cx="85" cy="125" r="3" fill="#22c55e" className="animate-pulse"/> <!-- LED Verde Encendido -->
+                                
+                                <!-- Receptor Inalámbrico USB enchufado al adaptador en el laptop -->
+                                <rect x="180" y="60" width="35" height="70" rx="6" fill="#111" stroke="#333" stroke-width="2"/>
+                                <rect x="215" y="80" width="10" height="15" fill="#cbd5e1"/> <!-- Conector metálico -->
+                                <circle cx="197" cy="80" r="3" fill="#3b82f6" className="animate-pulse"/> <!-- LED Azul de Enlace -->
+
+                                <!-- Laptop Teclado Lateral -->
+                                <path d="M 240 40 L 290 40 L 290 170 L 240 170 Z" fill="#475569"/>
+                                <rect x="250" y="50" width="30" height="110" fill="#334155"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center italic">Representación técnica de la Foto 1: Micrófono lavalier inalámbrico USB conectado para pruebas de captura de voz directas.</p>
+                    </div>
+
+                    <!-- Representación de la Foto 2: Módulo DAC I2S MAX98357A -->
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">FOTO REAL 2: AMPLIFICADOR I2S</span>
+                        <div class="h-64 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-4">
+                            <!-- SVG que representa la placa del amplificador MAX98357A con sus conexiones a la protoboard -->
+                            <svg viewBox="0 0 300 200" class="w-full h-full max-h-60">
+                                <!-- Fondo Protoboard -->
+                                <rect x="10" y="10" width="280" height="180" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+                                <!-- Filas de la protoboard -->
+                                <line x1="20" y1="40" x2="280" y2="40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"/>
+                                <line x1="20" y1="60" x2="280" y2="60" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"/>
+                                <line x1="20" y1="140" x2="280" y2="140" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"/>
+                                <line x1="20" y1="160" x2="280" y2="160" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"/>
+                                
+                                <!-- Módulo MAX98357A Púrpura -->
+                                <rect x="100" y="70" width="100" height="60" rx="4" fill="#581c87" stroke="#3b0764" stroke-width="2"/>
+                                <text x="150" y="90" text-anchor="middle" fill="#fff" font-size="8" font-family="monospace" font-weight="bold">MAX98357A</text>
+                                <text x="150" y="102" text-anchor="middle" fill="#c084fc" font-size="7" font-family="monospace">I2S DAC AMP</text>
+
+                                <!-- Bornera Verde de Conexión de Altavoz -->
+                                <rect x="175" y="85" width="20" height="30" rx="2" fill="#15803d" stroke="#166534" stroke-width="1.5"/>
+                                <circle cx="185" cy="95" r="3" fill="#111"/>
+                                <circle cx="185" cy="105" r="3" fill="#111"/>
+
+                                <!-- Cables Multicolores (Pines soldados y jumpers insertados) -->
+                                <path d="M 110 130 C 110 160, 50 160, 30 140" fill="none" stroke="#ef4444" stroke-width="2"/> <!-- VCC Rojo -->
+                                <path d="M 130 130 C 130 170, 70 170, 50 140" fill="none" stroke="#3b82f6" stroke-width="2"/> <!-- LRC Azul -->
+                                <path d="M 150 130 C 150 180, 90 180, 70 140" fill="none" stroke="#eab308" stroke-width="2"/> <!-- DIN Amarillo -->
+                                <path d="M 170 130 C 170 190, 110 190, 90 140" fill="none" stroke="#10b981" stroke-width="2"/> <!-- BCLK Verde -->
+
+                                <!-- Cable naranja de salida parlante saliendo de la bornera verde -->
+                                <path d="M 185 100 C 220 100, 250 150, 280 150" fill="none" stroke="#f97316" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center italic">Representación de la Foto 2: Primer plano del cableado del módulo de audio digital MAX98357A I2S montado en protoboard.</p>
+                    </div>
+
+                    <!-- Representación de la Foto 3: Circuito Completo con Pantalla -->
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 md:col-span-2">
+                        <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">FOTO REAL 3: VISTA DE CONJUNTO DEL HARDWARE</span>
+                        <div class="h-64 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-4">
+                            <!-- SVG que ilustra el circuito de prueba completo con el ESP32, jumpers en espiral, pantalla OLED roja e interconexión general -->
+                            <svg viewBox="0 0 600 200" class="w-full h-full max-h-60">
+                                <!-- Protoboard Central Larga -->
+                                <rect x="20" y="30" width="560" height="140" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="30" y1="50" x2="570" y2="50" stroke="#f43f5e" stroke-width="1" stroke-dasharray="1"/>
+                                <line x1="30" y1="150" x2="570" y2="150" stroke="#3b82f6" stroke-width="1" stroke-dasharray="1"/>
+
+                                <!-- ESP32 DevKit Insertado en la derecha -->
+                                <rect x="360" y="55" width="160" height="90" rx="4" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                                <rect x="380" y="70" width="60" height="60" rx="2" fill="#0f172a"/>
+                                <text x="410" y="105" text-anchor="middle" fill="#fff" font-size="10" font-family="monospace">ESP32</text>
+
+                                <!-- Pantalla OLED Roja conectada mediante jumpers colgantes en la izquierda -->
+                                <rect x="40" y="50" width="110" height="100" rx="4" fill="#991b1b" stroke="#7f1d1d" stroke-width="3"/>
+                                <rect x="50" y="65" width="90" height="70" rx="2" fill="#111"/> <!-- Área de cristal -->
+                                <text x="95" y="105" text-anchor="middle" fill="#0ea5e9" font-size="8" font-family="monospace" className="animate-pulse">YARBIZ COGNITIVE</text>
+                                
+                                <!-- Módulo Amplificador MAX98357A -->
+                                <rect x="230" y="75" width="60" height="50" rx="3" fill="#581c87" stroke="#3b0764"/>
+
+                                <!-- Caos de Jumpers Lógicos de Conexión (Curvas fluidas multicolores) -->
+                                <path d="M 120 50 C 160 10, 300 10, 370 70" fill="none" stroke="#ef4444" stroke-width="2.5"/> <!-- Rojo VCC -->
+                                <path d="M 130 50 C 180 20, 320 20, 380 70" fill="none" stroke="#111827" stroke-width="2.5"/> <!-- Negro GND -->
+                                <path d="M 140 50 C 200 30, 340 30, 390 70" fill="none" stroke="#eab308" stroke-width="1.5"/> <!-- SDA Amarillo -->
+                                <path d="M 150 50 C 220 40, 360 40, 400 70" fill="none" stroke="#3b82f6" stroke-width="1.5"/> <!-- SCL Azul -->
+
+                                <path d="M 240 125 C 260 180, 400 180, 450 135" fill="none" stroke="#10b981" stroke-width="2"/> <!-- Green Pin -->
+                                <path d="M 250 125 C 270 190, 410 190, 460 135" fill="none" stroke="#f59e0b" stroke-width="2"/> <!-- Orange Pin -->
+                                <path d="M 260 125 C 280 200, 420 200, 470 135" fill="none" stroke="#a855f7" stroke-width="2"/> <!-- Purple Pin -->
+
+                                <!-- Cable de alimentación blanco micro-USB conectado al ESP32 -->
+                                <path d="M 520 100 L 590 100" fill="none" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center italic">Representación de la Foto 3: Vista general del montaje en protoboard mostrando el microcontrolador ESP32 DevKit, el mazo de jumpers multicolores y la pantalla conectada.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO VI -->
+        <section id="capitulo6" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm">VI</span>
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-white">Capítulo VI: Conclusiones</h2>
+            </div>
+            
+            <div class="prose prose-slate dark:prose-invert max-w-none space-y-4">
+                <ul class="space-y-3 list-none p-0">
+                    <li class="p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0"></i>
+                        <span class="text-sm">La división funcional descentralizada (procesamiento de control local en ESP32 y procesamiento cognitivo en servidor Python) demostró ser la arquitectura idónea para mantener latencias menores a 3 segundos en exteriores.</span>
+                    </li>
+                    <li class="p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0"></i>
+                        <span class="text-sm">La incorporación de un corpus adaptado con toponimia y modismos coloquiales de Santa Cruz de la Sierra es crítica para garantizar una tasa de reconocimiento semántico exitoso por encima del 85%.</span>
+                    </li>
+                    <li class="p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0"></i>
+                        <span class="text-sm">El uso de sensores de proximidad para activar el modo de bajo consumo eléctrico es un requisito indispensable para hacer factible la instalación del tótem como nodo de red urbana autónomo.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LEAN CANVAS & VIABILIDAD COMERCIAL -->
+        <section id="canvas" class="scroll-mt-24 space-y-8">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm">VII</span>
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-white">Capítulo VII: Lean Canvas & Viabilidad Comercial</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200">7.1 YARVIZ - Matriz Lean Canvas (Hackathon 2026)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <!-- Fila 1: Problema, Solución, Propuesta Única, Ventaja, Segmentos -->
+                    <div class="md:col-span-2 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-rose-500">1. Problema</h4>
+                        <ul class="text-xs space-y-1 text-slate-500 dark:text-slate-400 list-disc pl-4">
+                            <li>Brecha aprendizaje robótica simulada</li>
+                            <li>Altos costos asistentes robóticos ($500+)</li>
+                            <li>Pérdida de privacidad en altavoces comerciales</li>
+                        </ul>
+                    </div>
+                    <div class="md:col-span-1 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-emerald-500">4. Solución</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Ecosistema híbrido: Chasis 3D, cerebro en la nube con API ElevenLabs y configuración web local.</p>
+                    </div>
+                    <div class="md:col-span-1 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-brand-500">3. Propuesta Única</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Hardware ultra-bajo costo ($19 USD) con privacidad absoluta y síntesis de voz realista en español.</p>
+                    </div>
+                    <div class="md:col-span-1 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-indigo-500">9. Ventaja Injusta</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Comunidad Open Source de embajadores, integración ElevenLabs nativa y hardware altamente rentable.</p>
+                    </div>
+                    
+                    <!-- Fila 2: Métricas, Canales, Público Objetivo -->
+                    <div class="md:col-span-1 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-amber-500">8. Métricas Clave</h4>
+                        <ul class="text-xs space-y-1 text-slate-500 dark:text-slate-400 list-disc pl-4">
+                            <li>Descargas de GitHub</li>
+                            <li>Tasa de retención anual</li>
+                            <li>Net Promoter Score > 50</li>
+                        </ul>
+                    </div>
+                    <div class="md:col-span-2 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-indigo-500">5. Canales de Distribución</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Landing interactiva 3D, repositorios open-source GitHub, marketing automatizado de videos por Remotion.</p>
+                    </div>
+                    <div class="md:col-span-2 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-brand-500">2. Público Objetivo</h4>
+                        <ul class="text-xs space-y-1 text-slate-500 dark:text-slate-400 list-disc pl-4">
+                            <li>Makers, entusiastas DIY</li>
+                            <li>Educadores STEM de colegios/universidades</li>
+                            <li>Startups y academias de tecnología</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-200 mt-8">7.2 Modelo de Licenciamiento Comercial (Ingresos Marginales $0)</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Starter Plan -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-sm relative overflow-hidden">
+                        <div>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">STARTER</span>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-3xl font-extrabold">$10</span>
+                                <span class="text-xs text-slate-400">pago único</span>
+                            </div>
+                            <ul class="mt-6 space-y-3 text-xs text-slate-600 dark:text-slate-400">
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Planos 3D STL del Tótem</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Lista de Materiales (BOM)</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Guía rápida de compra</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Pro Builder -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border-2 border-brand-500 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                        <span class="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[8px] font-bold bg-brand-500 text-white uppercase tracking-wider">RECOMENDADO</span>
+                        <div>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-brand-50 text-brand-600 dark:bg-brand-950/50 dark:text-brand-400">PRO BUILDER</span>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-3xl font-extrabold">$15</span>
+                                <span class="text-xs text-slate-400">pago único</span>
+                            </div>
+                            <ul class="mt-6 space-y-3 text-xs text-slate-600 dark:text-slate-400">
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Todo lo del plan Starter</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Firmware ESP32 Completo</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Diagramas eléctricos & esquemas</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Masterclass -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-sm relative overflow-hidden">
+                        <div>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">MASTERCLASS</span>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-3xl font-extrabold">$20</span>
+                                <span class="text-xs text-slate-400">pago único</span>
+                            </div>
+                            <ul class="mt-6 space-y-3 text-xs text-slate-600 dark:text-slate-400">
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Todo lo del plan Pro Builder</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Videotutoriales paso a paso</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Acceso a Discord VIP</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Pie de página unificado -->
+<footer class="bg-slate-900 text-slate-400 border-t border-slate-850 py-12 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+        <div class="flex items-center justify-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-brand-500 text-white flex items-center justify-center font-bold">Y</div>
+            <span class="text-white font-extrabold tracking-wider">YARBIZ COGNITIVE</span>
+        </div>
+        <p class="text-xs max-w-md mx-auto">Documentación construida de forma colaborativa para la Hackathon 2026. Proyecto protegido bajo Licencia MIT.</p>
+        <p class="text-[10px] text-slate-600">&copy; 2026 YARBIZ. Santa Cruz, Bolivia. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script>
+    // Inicializar íconos de Lucide
+    lucide.createIcons();
+
+    // Lógica para toggle de modo oscuro
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+    });
+
+    // Control de barra de progreso de lectura superior
+    window.addEventListener('scroll', () => {
+        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('readProgress').style.width = scrolled + '%';
+    });
+
+    // Lógica interactiva para rastreo de pines en el ESP32
+    const signalRows = document.querySelectorAll('.signal-row');
+    const pins = document.querySelectorAll('.interactive-pin');
+    const ledIndicator = document.getElementById('led-indicator');
+
+    signalRows.forEach(row => {
+        row.addEventListener('click', () => {
+            const pinId = row.getAttribute('data-pin');
+            
+            // Quitar clase activa previa de todos los pines
+            pins.forEach(p => p.classList.remove('active-pin'));
+            
+            // Iluminar el pin seleccionado
+            const activePin = document.getElementById(pinId);
+            if (activePin) {
+                activePin.classList.add('active-pin');
+                
+                // Animar el LED de estado
+                ledIndicator.setAttribute('fill', '#f43f5e');
+                ledIndicator.setAttribute('stroke', '#fda4af');
+                
+                // Volver a estado de espera tras 1.5s
+                setTimeout(() => {
+                    ledIndicator.setAttribute('fill', '#1e293b');
+                    ledIndicator.setAttribute('stroke', '#334155');
+                }, 1500);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
