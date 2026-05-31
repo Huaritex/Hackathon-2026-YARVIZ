@@ -316,39 +316,40 @@ function Scene2to4({ frame }: FrameProps): React.ReactElement {
  * prisms intensify their glow (HologramPrism ramps glow over frames 640–660).
  */
 function Scene5({ frame }: FrameProps): React.ReactElement {
-  // Wordmark letter-spacing opens from tight to airy over frames 620–660.
+  // Typography tracking dispersion — spec: letter-spacing −0.25em → 0.05em
+  // GSAP expoOut: rapid initial spread then coasts to final value
   const letterSpacingEm = interpolate(frame, [620, 660], [-0.25, 0.05], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.expoOut,
   });
 
-  // Wordmark opacity comes up alongside the monolith fade.
+  // Wordmark opacity: GSAP power4Out matches the luminescence spec requirement
   const titleOpacity = interpolate(frame, [612, 640], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.power4Out,
   });
 
-  // Subtitle fade.
+  // Subtitle fade — GSAP sineOut for gentle organic feel
   const subtitleOpacity = interpolate(frame, [625, 655], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.sineOut,
   });
 
-  // Footer fades in last.
+  // Footer fades in last — GSAP sineOut
   const footerOpacity = interpolate(frame, [650, 680], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.sineOut,
   });
 
-  // Final glow pulse around frame 660 — a soft radial bloom behind the wordmark.
+  // Final glow bloom — sineInOut for the ambient bloom pulse
   const finalGlow = interpolate(frame, [655, 665, 700], [0, 1, 0.5], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.sineInOut,
   });
 
   return (

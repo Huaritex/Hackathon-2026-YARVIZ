@@ -38,11 +38,12 @@ export function CentralMonolith({ frame, scene }: CentralMonolithProps): React.R
     easing: Easing.overshoot,
   });
 
-  // Glow opacity: 0 → 1 over frames 0–15
+  // Glow opacity: 0 → 1 peaking exactly at the scale apex (frame 15)
+  // GSAP power4Out: luminescence hits full intensity at the overshoot peak
   const glowOpacityScene1 = interpolate(frame, [0, 15], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.snappyOut,
+    easing: Easing.power4Out,
   });
 
   // Scanline Y progress: sweeps from top (−110) to bottom (+110) of 220px icon

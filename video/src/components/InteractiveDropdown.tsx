@@ -138,7 +138,8 @@ export const InteractiveDropdown: React.FC<InteractiveDropdownProps> = ({
           const isSelected = i === selectedIndex;
 
           // Item stagger: translateY(8→0), opacity(0→1) over 8 frames
-          const itemProgress = frameProgress(frame, appearAt, 8, Easing.snappyOut);
+          // GSAP backOut gives a tiny lift overshoot that reads as "snapping into place"
+          const itemProgress = frameProgress(frame, appearAt, 8, Easing.backOut);
           const itemTranslateY = interpolate(itemProgress, [0, 1], [8, 0]);
           const itemOpacity = itemProgress;
 
